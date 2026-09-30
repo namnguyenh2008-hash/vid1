@@ -13,14 +13,19 @@
 html,body{width:1080px;height:1920px;overflow:hidden;background:#fff}
 #root{position:relative;width:100%;height:100%;font-family:"BVP",sans-serif;color:#1A1A1A;overflow:hidden;background:#fff}
 #stage{position:absolute;inset:0;z-index:1}
-.scene{position:absolute;inset:0;visibility:hidden;background:#fff;overflow:hidden}
+.scene{position:absolute;inset:0;visibility:hidden;overflow:hidden}
+.gc{position:absolute;width:160px;height:360px;opacity:0}
+.gc>div{position:absolute;inset:0;border-radius:22px;display:flex;align-items:center;justify-content:center;text-align:center}
+.gc .back{background:#0077B6;color:#fff;font-size:120px;font-weight:800;box-shadow:0 10px 26px rgba(0,119,182,.28);border:4px solid #3CE8B4}
+.gc .front{background:#fff;color:#1A1A1A;font-size:38px;font-weight:800;line-height:1.15;padding:10px;border:4px solid #3CE8B4;box-shadow:0 10px 26px rgba(0,0,0,.1);opacity:0}
+.deco{position:absolute;opacity:.75}
 .abs{position:absolute}
 .hid{opacity:0}
 .full{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 /* card */
-.card{position:absolute;left:60px;width:870px;padding:34px 44px 40px;border-radius:32px;background:rgba(255,255,255,.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 12px 40px rgba(0,0,0,.12);text-align:center}
-.tag{display:block;font-size:28px;font-weight:800;letter-spacing:.14em;color:#0077B6;margin-bottom:10px}
-.head{display:block;font-size:88px;font-weight:800;line-height:1.12;letter-spacing:-.01em}
+.card{position:absolute;left:60px;width:870px;padding:40px 48px 46px;border-radius:36px;background:rgba(255,255,255,.72);border:3px solid rgba(60,232,180,.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 12px 40px rgba(0,0,0,.12);text-align:center}
+.tag{display:block;font-size:34px;font-weight:800;letter-spacing:.14em;color:#0077B6;margin-bottom:10px}
+.head{display:block;font-size:106px;font-weight:800;line-height:1.12;letter-spacing:-.01em}
 .pill{display:inline-block;background:#0077B6;color:#fff;border-radius:999px;padding:0 .32em;line-height:1.15}
 .sub{display:flex;align-items:center;justify-content:center;gap:14px;font-size:36px;font-weight:600;margin-top:16px;color:#1A1A1A}
 .chip{position:absolute;display:inline-block;padding:10px 26px;border-radius:999px;background:#fff;border:3px solid #0077B6;color:#0077B6;font-weight:800;font-size:34px;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.08)}
@@ -30,8 +35,8 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#fff}
 .marker{position:absolute;background:#0077B6;opacity:.28;border-radius:6px;transform-origin:left center}
 /* S2 list */
 .lw{position:absolute;width:420px;height:80px;margin-left:-210px;margin-top:-40px;line-height:80px;text-align:center;font-size:56px;font-weight:800;opacity:0}
-#bar{position:absolute;left:60px;top:160px;width:870px;height:10px;border-radius:5px;background:#E6EEF4;overflow:hidden}
-#barfill{width:100%;height:100%;background:#0077B6;transform-origin:left center}
+#bar{position:absolute;left:60px;top:1190px;opacity:0;width:870px;height:10px;border-radius:5px;background:#E6EEF4;overflow:hidden}
+#barfill{width:100%;height:100%;background:linear-gradient(90deg,#3CE8B4,#0077B6);transform-origin:left center}
 .opt{position:absolute;top:1090px;width:200px;height:96px;margin-left:-100px;border-radius:999px;border:4px solid #1A1A1A;background:#fff;font-size:44px;font-weight:800;line-height:88px;text-align:center}
 /* network */
 .node{position:absolute;width:240px;height:70px;margin-left:-120px;margin-top:-35px;border-radius:999px;background:#EEF1F4;color:#6B7280;font-size:32px;font-weight:800;line-height:70px;text-align:center}
@@ -60,30 +65,38 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#fff}
 <audio id="vo" src="assets/vo.wav" data-start="0" data-duration="93.562" data-track-index="9" data-volume="1"></audio>
 
 <div id="stage" class="clip" data-start="0" data-duration="94.362" data-track-index="0">
-
- <!-- S1 -->
- <div class="scene" id="s1">
-  <div class="full" id="s1img" style="background:url(assets/bed.jpg) 42% 50%/cover"></div>
-  <div class="full" style="background:rgba(255,255,255,.2)"></div>
-  <div class="card hid" id="s1card" style="top:1000px"><span class="tag">TEST TRÍ NHỚ</span><span class="head"><span class="pill">10</span> từ</span></div>
-  <svg class="abs hid" id="ear" style="left:800px;top:900px" width="120" height="120" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#0077B6"/><path d="M24 26a9 9 0 1 1 15 7c-3 2-4 4-4 7a5 5 0 0 1-9 2" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="M29 27a4 4 0 0 1 7 1" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/></svg>
+ <div id="bgl" class="abs" style="inset:0;background:linear-gradient(180deg,#EAF4FB 0%,#F5FAFD 55%,#EDFAF4 100%);overflow:hidden">
+  <div id="dots" class="abs" style="left:-80px;top:-80px;width:1240px;height:2080px;opacity:.1;background-image:radial-gradient(#0077B6 2.4px,transparent 2.8px);background-size:40px 40px"></div>
+  <div id="blob1" class="abs" style="left:-260px;top:-200px;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,119,182,.13),transparent 70%)"></div>
+  <div id="blob2" class="abs" style="left:600px;top:1250px;width:760px;height:760px;border-radius:50%;background:radial-gradient(circle,rgba(60,232,180,.2),transparent 70%)"></div>
+  <div id="blob3" class="abs" style="left:720px;top:260px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(60,232,180,.12),transparent 70%)"></div>
+  <svg class="abs" id="geo" style="left:0;top:0;opacity:.09" width="1080" height="1920"><g fill="none" stroke="#0077B6" stroke-width="3"><circle cx="140" cy="1500" r="120"/><circle cx="140" cy="1500" r="190"/><path d="M820 120l120 70v140l-120 70-120-70V190z"/><path d="M60 620h140M960 900v160"/></g></svg>
  </div>
 
- <!-- S2 to S4: word list -->
- <div class="scene" id="slist">
-  <div class="full" style="background:url(assets/bed.jpg) 42% 50%/cover;opacity:.08;filter:blur(14px)"></div>
-  <div id="bar"><div id="barfill"></div></div>
+ <!-- S1 to S4: memory game -->
+ <div class="scene" id="sgame">
+  <div class="deco" id="d1" style="left:90px;top:690px"><svg width="110" height="110" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="none" stroke="#3CE8B4" stroke-width="5"/><path d="M24 25a8 8 0 1 1 11 7c-2 1-3 3-3 6" fill="none" stroke="#3CE8B4" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="47" r="3.5" fill="#3CE8B4"/></svg></div>
+  <div class="deco" id="d2" style="left:780px;top:640px"><svg width="150" height="150" viewBox="0 0 150 130"><path d="M75 18C60 2 30 6 26 28 8 32 4 58 18 70 8 86 20 108 42 106 50 124 72 124 75 110 78 124 100 124 108 106 130 108 142 86 132 70 146 58 142 32 124 28 120 6 90 2 75 18Z" fill="none" stroke="#0077B6" stroke-width="8" stroke-linejoin="round"/><path d="M75 18v92M40 48c10 0 16 6 16 16M110 48c-10 0-16 6-16 16" fill="none" stroke="#0077B6" stroke-width="7" stroke-linecap="round"/></svg></div>
+  <div class="deco" id="d3" style="left:130px;top:1110px"><svg width="120" height="120" viewBox="0 0 150 130"><path d="M75 18C60 2 30 6 26 28 8 32 4 58 18 70 8 86 20 108 42 106 50 124 72 124 75 110 78 124 100 124 108 106 130 108 142 86 132 70 146 58 142 32 124 28 120 6 90 2 75 18Z" fill="none" stroke="#3CE8B4" stroke-width="8" stroke-linejoin="round"/><path d="M75 18v92M40 48c10 0 16 6 16 16M110 48c-10 0-16 6-16 16" fill="none" stroke="#3CE8B4" stroke-width="7" stroke-linecap="round"/></svg></div>
+  <div class="deco" id="d4" style="left:790px;top:1080px"><svg width="120" height="120" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="none" stroke="#0077B6" stroke-width="5"/><path d="M24 25a8 8 0 1 1 11 7c-2 1-3 3-3 6" fill="none" stroke="#0077B6" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="47" r="3.5" fill="#0077B6"/></svg></div>
+  <div class="abs hid" id="title" style="left:0;width:990px;top:300px;text-align:center"><div style="font-size:110px;font-weight:800;line-height:1.1">Kí ức sai lệch</div><div class="pill" style="font-size:54px;font-weight:800;margin-top:26px;padding:8px 34px">(False memory)</div></div>
+  <div class="abs hid" id="conf" style="left:95px;top:760px;width:800px;padding:30px 38px 36px;border-radius:36px;background:rgba(255,255,255,.85);border:5px solid #3CE8B4;box-shadow:0 12px 40px rgba(0,0,0,.1)">
+   <div style="display:flex;justify-content:space-between;align-items:baseline;font-size:42px;font-weight:800"><span>Độ tự tin vào trí nhớ</span><span id="confnum" style="color:#0077B6;font-size:52px">0%</span></div>
+   <div style="margin-top:20px;height:44px;border-radius:22px;background:#E3EEF5;overflow:hidden"><div id="conffill" style="width:100%;height:100%;border-radius:22px;background:linear-gradient(90deg,#3CE8B4,#0077B6);transform-origin:left center"></div></div>
+  </div>
   <div id="list" class="abs" style="inset:0"></div>
-  <div class="abs" id="scan" style="left:80px;top:250px;width:830px;height:6px;border-radius:3px;background:#0077B6;box-shadow:0 0 24px #0077B6;opacity:0"></div>
-  <div class="abs hid" id="ngu" style="left:0;width:990px;top:800px;text-align:center;font-size:160px;font-weight:800;color:#0077B6">ngủ?</div>
+  <div id="bar" style="height:12px;border-radius:6px;width:870px;background:#E3EEF5;overflow:hidden"><div id="barfill"></div></div>
+  <div class="abs" id="veil" style="inset:0;background:rgba(255,255,255,.4);opacity:0"></div>
+  <div class="abs" id="scan" style="left:170px;top:200px;width:650px;height:6px;border-radius:3px;background:#3CE8B4;box-shadow:0 0 24px #3CE8B4;opacity:0"></div>
+  <div class="abs hid" id="ngu" style="left:0;width:990px;top:780px;text-align:center;font-size:170px;font-weight:800;color:#0077B6">ngủ?</div>
   <div class="opt hid" id="optY" style="left:320px">CÓ</div>
   <div class="opt hid" id="optN" style="left:670px">KHÔNG</div>
   <div id="confetti" class="abs" style="left:320px;top:1138px"></div>
   <svg class="abs hid" id="cursor" style="left:0;top:0" width="80" height="96" viewBox="0 0 40 48"><path d="M14 4v24l-5-5-4 4 11 14h16l3-15-12-4V4a3 3 0 0 0-6 0z" fill="#fff" stroke="#1A1A1A" stroke-width="2.5" stroke-linejoin="round"/></svg>
   <div class="abs hid" id="clapper" style="left:800px;top:930px"></div>
-  <div class="abs hid" id="slot" style="left:345px;top:830px;width:300px;height:96px;border:4px dashed #9AA3AE;border-radius:24px;text-align:center;line-height:88px;font-size:52px;font-weight:800;color:#9AA3AE">ngủ
-   <div id="strike" style="position:absolute;left:-20px;top:42px;width:340px;height:8px;border-radius:4px;background:#0077B6;transform-origin:left center"></div></div>
-  <div class="card hid" id="s4card" style="top:990px"><span class="tag">BẠN VỪA TẠO RA</span><span class="head">ký ức <span class="pill">giả</span></span></div>
+  <div class="abs hid" id="slot" style="left:345px;top:790px;width:300px;height:100px;border:4px dashed #9AA3AE;border-radius:24px;text-align:center;line-height:92px;font-size:56px;font-weight:800;color:#9AA3AE;background:rgba(255,255,255,.6)">ngủ
+   <div id="strike" style="position:absolute;left:-20px;top:44px;width:340px;height:8px;border-radius:4px;background:#0077B6;transform-origin:left center"></div></div>
+  <div class="card hid" id="s4card" style="top:960px"><span class="tag">BẠN VỪA TẠO RA</span><span class="head">ký ức <span class="pill">giả</span></span></div>
  </div>
 
  <!-- S5 DRM -->
@@ -93,19 +106,25 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#fff}
   <div class="chip hid" id="n1" style="left:90px;top:770px">Deese</div>
   <div class="chip hid" id="n2" style="left:300px;top:770px">Roediger</div>
   <div class="chip hid" id="n3" style="left:580px;top:770px">McDermott</div>
+  <div class="abs hid" id="drminfo" style="left:60px;top:880px;width:870px;height:300px;display:flex;align-items:center;justify-content:space-between">
+   <div style="width:300px;padding:22px;border-radius:28px;background:#fff;border:4px solid #3CE8B4;font-size:30px;font-weight:600;line-height:1.5;text-align:center">giường · mệt<br>mơ · ngáy<br>gối · đêm…</div>
+   <svg width="140" height="60" viewBox="0 0 140 60"><path d="M6 30h110M96 10l24 20-24 20" fill="none" stroke="#0077B6" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+   <div style="width:330px;padding:22px;border-radius:28px;background:#0077B6;color:#fff;text-align:center"><div style="font-size:28px;font-weight:600;opacity:.85">từ mồi không xuất hiện</div><div style="font-size:64px;font-weight:800">ngủ ?</div></div>
+  </div>
   <div class="paper hid" id="p95" style="left:110px;top:560px;width:800px"><img src="assets/paper1995.png"><div class="marker" id="m95" style="left:4%;top:18.5%;width:92%;height:6.5%"></div></div>
   <div class="chip hid" id="c95" style="left:170px;top:1060px">Roediger &amp; McDermott, 1995</div>
  </div>
 
  <!-- S6 network -->
  <div class="scene" id="s6">
+  <div class="abs hid" id="s6top" style="left:0;width:990px;top:200px;text-align:center"><span class="chip" style="position:relative;border-color:#3CE8B4;font-size:38px">MẠNG LƯỚI TỪ</span></div>
   <div class="abs hid" id="lydo" style="left:0;width:990px;top:760px;text-align:center;font-size:110px;font-weight:800">Lý do?</div>
   <svg class="abs" id="net" style="left:0;top:0" width="1080" height="1920"></svg>
   <div id="nodes" class="abs" style="inset:0"></div>
   <div class="abs hid" id="core" style="left:415px;top:780px;width:160px;height:160px;border-radius:50%;border:5px dashed #9AA3AE;background:#fff">
    <div id="corefill" style="position:absolute;inset:-5px;border-radius:50%;background:#0077B6;opacity:0;color:#fff;font-size:52px;font-weight:800;text-align:center;line-height:170px">ngủ</div>
   </div>
-  <div class="card hid" id="s6card" style="top:170px;padding:26px 30px 30px"><span class="tag">GỌI LÀ</span><span class="head" style="font-size:66px"><span class="pill">spreading activation</span></span></div>
+  <div class="card hid" id="s6card" style="top:170px;padding:26px 30px 30px"><span class="tag">GỌI LÀ</span><span class="head" style="font-size:70px"><span class="pill">spreading activation</span></span></div>
   <div class="abs hid" id="brain" style="left:620px;top:950px"><svg width="150" height="130" viewBox="0 0 150 130"><path d="M75 18C60 2 30 6 26 28 8 32 4 58 18 70 8 86 20 108 42 106 50 124 72 124 75 110 78 124 100 124 108 106 130 108 142 86 132 70 146 58 142 32 124 28 120 6 90 2 75 18Z" fill="#fff" stroke="#0077B6" stroke-width="7" stroke-linejoin="round"/><path d="M75 18v92M40 48c10 0 16 6 16 16M110 48c-10 0-16 6-16 16M38 84c8-4 18-2 22 6M112 84c-8-4-18-2-22 6" fill="none" stroke="#0077B6" stroke-width="6" stroke-linecap="round"/><circle cx="58" cy="66" r="5" fill="#1A1A1A"/><circle cx="92" cy="66" r="5" fill="#1A1A1A"/></svg></div>
   <div class="bubble hid" id="brainsay" style="left:560px;top:1110px;padding:14px 30px;font-size:40px">nghe rồi mà!</div>
  </div>
@@ -113,7 +132,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#fff}
  <!-- S7 Loftus -->
  <div class="scene" id="s7">
   <div class="abs" id="lofwrap" style="left:225px;top:180px;width:540px;height:540px;border-radius:50%;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.15)"><div id="lofimg" class="full" style="background:url(assets/loftus.jpg) 38% 30%/cover"></div></div>
-  <div class="card hid" id="s7card" style="top:780px"><span class="tag">NHÀ TÂM LÝ HỌC</span><span class="head" style="font-size:80px">Elizabeth Loftus</span>
+  <div class="card hid" id="s7card" style="top:780px"><span class="tag">NHÀ TÂM LÝ HỌC</span><span class="head" style="font-size:88px">Elizabeth Loftus</span>
    <div class="sub hid" id="s7sub"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#0077B6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M24 6v34M14 42h20M8 12h32M8 12l-6 14h12zM40 12l-6 14h12zM2 26a6 4 0 0 0 12 0M34 26a6 4 0 0 0 12 0"/></svg>chuyên gia về lời khai nhân chứng</div></div>
   <div class="abs hid" id="tv" style="left:275px;top:380px;width:440px;height:300px">
    <div class="frame" style="inset:0;background:#1A1A1A;border-radius:28px;padding:16px"><div id="tvscreen" style="position:relative;width:100%;height:100%;border-radius:16px;background:#EAF4FA;overflow:hidden"></div></div>
@@ -141,7 +160,10 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#fff}
  <div class="scene" id="s9">
   <div class="abs hid" id="cal" style="left:345px;top:360px;width:300px;height:300px"></div>
   <div class="abs hid" id="callab" style="left:0;width:990px;top:700px;text-align:center;font-size:72px;font-weight:800;color:#0077B6">+7 ngày</div>
-  <div class="card hid" id="s9card" style="top:180px"><span class="tag">CÂU HỎI BẪY</span><span class="head" style="font-size:76px">Bạn có thấy <span class="pill">kính vỡ</span> không?</span></div>
+  <div class="card hid" id="s9card" style="top:180px"><span class="tag">CÂU HỎI BẪY</span><span class="head" style="font-size:90px">Bạn có thấy <span class="pill">kính vỡ</span> không?</span></div>
+  <div class="abs hid" id="glassq" style="left:250px;top:640px;width:490px;height:420px">
+   <svg width="490" height="420" viewBox="0 0 490 420"><rect x="95" y="40" width="300" height="220" rx="28" fill="#fff" stroke="#3CE8B4" stroke-width="10"/><path d="M245 40v220M95 150h300" stroke="#3CE8B4" stroke-width="8"/><path d="M130 80l40 40M320 190l30 30" stroke="#BFE6FA" stroke-width="10" stroke-linecap="round"/><circle cx="380" cy="300" r="84" fill="#0077B6"/><path d="M356 282a24 24 0 1 1 32 22c-6 3-8 8-8 14" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round"/><circle cx="380" cy="344" r="8" fill="#fff"/></svg>
+  </div>
   <div class="frame hid" id="mini" style="left:60px;top:620px;width:400px;height:240px"></div>
   <div class="abs hid" id="check" style="left:60px;top:880px;width:400px;text-align:center;font-size:38px;font-weight:800;color:#0A9E78"><span style="color:#3CE8B4;font-size:46px">✔</span> 0 mảnh kính</div>
   <div class="abs hid" id="thinker" style="left:790px;top:1010px"></div>
@@ -165,14 +187,19 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#fff}
    <div id="filmscreen" style="position:relative;width:100%;height:100%;background:#EAF4FA;border-radius:10px;overflow:hidden"></div>
   </div>
   <div class="bluepill hid" id="flyword" style="left:560px;top:620px;font-size:46px">đâm sầm</div>
-  <div class="card hid" id="s10card" style="top:860px"><span class="tag">HIỆN TƯỢNG</span><span class="head" style="font-size:80px"><span class="pill">misinformation</span> effect</span></div>
+  <div class="card hid" id="s10card" style="top:860px"><span class="tag">HIỆN TƯỢNG</span><span class="head" style="font-size:94px"><span class="pill">misinformation</span> effect</span></div>
  </div>
 
  <!-- S12 CTA -->
  <div class="scene" id="s12">
   <img class="abs hid" id="logo" src="assets/logo.svg" style="left:305px;top:170px;width:380px;height:380px;border-radius:48px">
-  <div class="card hid" id="s12card" style="top:620px"><span class="tag">TẬP SAU</span><span class="head">Cài <span class="pill">ký ức giả</span></span></div>
-  <div class="bluepill hid" id="follow" style="left:370px;top:940px;font-size:48px">Follow</div>
+  <div class="card hid" id="s12card" style="top:610px"><span class="tag">TẬP SAU</span><span class="head">Cài <span class="pill">ký ức giả</span></span></div>
+  <div class="abs hid" id="s12icons" style="left:60px;top:1060px;width:870px;display:flex;justify-content:center;gap:48px">
+   <div style="width:130px;height:130px;border-radius:50%;background:#fff;border:5px solid #3CE8B4;display:flex;align-items:center;justify-content:center"><svg width="84" height="84" viewBox="0 0 150 130"><path d="M75 18C60 2 30 6 26 28 8 32 4 58 18 70 8 86 20 108 42 106 50 124 72 124 75 110 78 124 100 124 108 106 130 108 142 86 132 70 146 58 142 32 124 28 120 6 90 2 75 18Z" fill="none" stroke="#0077B6" stroke-width="8" stroke-linejoin="round"/><path d="M75 18v92M40 48c10 0 16 6 16 16M110 48c-10 0-16 6-16 16" fill="none" stroke="#0077B6" stroke-width="7" stroke-linecap="round"/></svg></div>
+   <div style="width:130px;height:130px;border-radius:50%;background:#fff;border:5px solid #3CE8B4;display:flex;align-items:center;justify-content:center;"><svg width="84" height="84" viewBox="0 0 64 64" fill="none" stroke="#0077B6" stroke-width="5" stroke-linejoin="round"><rect x="8" y="8" width="48" height="50" rx="5"/><rect x="14" y="14" width="36" height="30" fill="#3CE8B4" stroke="none" opacity=".5"/><circle cx="26" cy="26" r="5"/><path d="M14 42l12-10 10 8 6-5 8 7"/></svg></div>
+   <div style="width:130px;height:130px;border-radius:50%;background:#fff;border:5px solid #3CE8B4;display:flex;align-items:center;justify-content:center"><svg width="84" height="84" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="none" stroke="#0077B6" stroke-width="5"/><path d="M24 25a8 8 0 1 1 11 7c-2 1-3 3-3 6" fill="none" stroke="#0077B6" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="47" r="3.5" fill="#0077B6"/></svg></div>
+  </div>
+  <div class="bluepill hid" id="follow" style="left:370px;top:960px;font-size:48px">Follow</div>
  </div>
 </div>
 
@@ -180,8 +207,8 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#fff}
 <div id="s11ov" class="clip" data-start="80.894" data-duration="5.921" data-track-index="2">
  <div class="abs" id="rec" style="left:60px;top:180px;padding:10px 26px;border-radius:14px;background:#0077B6;color:#fff;font-size:40px;font-weight:800">▶ REC
   <div id="recstrike" style="position:absolute;left:-10px;top:30px;width:190px;height:7px;background:#fff;border-radius:4px;box-shadow:0 0 0 3px #1A1A1A;transform-origin:left center"></div></div>
- <div class="card" id="s11card" style="top:1000px;opacity:0"><span class="head" id="s11a" style="font-size:84px">Não <span class="pill">dựng lại</span></span>
-  <span class="head" id="s11b" style="font-size:76px;position:absolute;left:0;right:0;top:34px;opacity:0">đôi khi <span class="pill">dựng sai</span></span></div>
+ <div class="card" id="s11card" style="top:1000px;opacity:0"><span class="head" id="s11a" style="font-size:100px">Não <span class="pill">dựng lại</span></span>
+  <span class="head" id="s11b" style="font-size:90px;position:absolute;left:0;right:0;top:40px;opacity:0">đôi khi <span class="pill">dựng sai</span></span></div>
 </div>
 
 <div id="caps" class="clip" data-start="0" data-duration="94.362" data-track-index="3"></div>
@@ -192,7 +219,6 @@ const T = {"S1": 0.0, "S1_tri": 3.44, "S1_nghe": 4.72, "S2": 6.88, "list": [6.88
 const CAPS = [{"s": 0.0, "e": 2.12, "w": [["Bạn", 0.0], ["có", 0.8], ["bao", 1.12], ["giờ", 1.36], ["thắc", 1.6], ["mắc", 1.88]]}, {"s": 2.12, "e": 3.12, "w": [["bản", 2.12], ["thân", 2.32], ["có", 2.48], ["phải", 2.64], ["là", 2.84], ["một", 2.96]]}, {"s": 3.12, "e": 4.16, "w": [["người", 3.12], ["có", 3.24], ["trí", 3.44], ["nhớ", 3.6], ["tốt", 3.76], ["không", 3.96]]}, {"s": 4.16, "e": 5.28, "w": [["Hãy", 4.16], ["cùng", 4.32], ["mình", 4.52], ["nghe", 4.72], ["kỹ", 4.84], ["mười", 5.0]]}, {"s": 5.28, "e": 6.83, "w": [["từ", 5.28], ["này", 5.44], ["để", 5.6], ["kiểm", 5.8], ["tra", 6.0], ["nhé", 6.2]]}, {"s": 14.44, "e": 16.08, "w": [["Ở", 14.44], ["trong", 14.68], ["list", 14.88], ["liệu", 15.52], ["từ", 15.72], ["ngủ", 15.88]]}, {"s": 16.08, "e": 17.32, "w": [["có", 16.08], ["xuất", 16.24], ["hiện", 16.4], ["không", 16.56], ["nhỉ", 16.76]]}, {"s": 17.32, "e": 18.32, "w": [["Nếu", 17.32], ["bạn", 17.56], ["nói", 17.8], ["có", 18.0]]}, {"s": 18.32, "e": 19.28, "w": [["Chúc", 18.32], ["mừng", 18.48], ["bạn", 18.68], ["vừa", 18.96], ["tạo", 19.12]]}, {"s": 19.28, "e": 20.08, "w": [["ra", 19.28], ["một", 19.36], ["ký", 19.52], ["ức", 19.68], ["giả", 19.88]]}, {"s": 20.08, "e": 20.96, "w": [["Thật", 20.08], ["ra", 20.24], ["không", 20.4], ["hề", 20.6], ["có", 20.8]]}, {"s": 20.96, "e": 21.679, "w": [["từ", 20.96], ["ngủ", 21.16], ["nào", 21.36], ["hết", 21.64]]}, {"s": 21.679, "e": 22.559, "w": [["Đây", 21.679], ["là", 21.839], ["bài", 21.959], ["test", 22.199]]}, {"s": 22.559, "e": 23.479, "w": [["DRM", 22.559], ["của", 23.119], ["các", 23.279]]}, {"s": 23.479, "e": 24.199, "w": [["Nhà", 23.479], ["tâm", 23.679], ["lý", 23.839], ["học", 23.959]]}, {"s": 24.199, "e": 26.079, "w": [["Deese,", 24.199], ["Roediger", 24.519], ["và", 25.079], ["McDermott", 25.239]]}, {"s": 26.079, "e": 27.359, "w": [["Lý", 26.079], ["do", 26.279], ["trong", 26.479], ["não", 26.679], ["thật", 27.039], ["ra", 27.199]]}, {"s": 27.359, "e": 28.559, "w": [["các", 27.359], ["từ", 27.519], ["luôn", 27.759], ["luôn", 27.919], ["liên", 28.119], ["quan", 28.319]]}, {"s": 28.559, "e": 29.559, "w": [["và", 28.559], ["kết", 28.759], ["nối", 28.879], ["với", 29.119], ["nhau", 29.279], ["như", 29.439]]}, {"s": 29.559, "e": 30.239, "w": [["một", 29.559], ["mạng", 29.759], ["lưới", 29.959]]}, {"s": 30.239, "e": 31.639, "w": [["Mỗi", 30.239], ["lần", 30.479], ["bạn", 30.719], ["nghe", 30.959], ["não", 31.239], ["sẽ", 31.439]]}, {"s": 31.639, "e": 32.639, "w": [["tự", 31.639], ["động", 31.759], ["kích", 31.919], ["hoạt", 32.119], ["lan", 32.319], ["sang", 32.479]]}, {"s": 32.639, "e": 33.439, "w": [["những", 32.639], ["từ", 32.799], ["bên", 32.999], ["cạnh", 33.199]]}, {"s": 33.439, "e": 34.239, "w": [["Hiện", 33.439], ["tượng", 33.599], ["này", 33.799], ["hay", 33.959], ["còn", 34.119]]}, {"s": 34.239, "e": 35.959, "w": [["được", 34.239], ["gọi", 34.359], ["là", 34.519], ["spreading", 34.639], ["activation", 35.119]]}, {"s": 35.959, "e": 36.999, "w": [["Nghe", 35.959], ["đủ", 36.119], ["nhiều", 36.279], ["về", 36.439], ["giấc", 36.559], ["ngủ", 36.759]]}, {"s": 36.999, "e": 38.239, "w": [["chữ", 36.999], ["ngủ", 37.199], ["sẽ", 37.359], ["tự", 37.559], ["sáng", 37.759], ["đèn", 37.999]]}, {"s": 38.239, "e": 39.759, "w": [["lên", 38.239], ["và", 38.439], ["lầm", 38.719], ["tưởng", 38.999], ["rằng", 39.279], ["bản", 39.559]]}, {"s": 39.759, "e": 41.053, "w": [["thân", 39.759], ["mình", 39.959], ["vừa", 40.159], ["nghe", 40.399], ["thấy", 40.599], ["nó", 40.839]]}, {"s": 41.053, "e": 42.413, "w": [["Nhà", 41.053], ["tâm", 41.693], ["lý", 42.013], ["học", 42.173], ["Elizabeth", 42.413]]}, {"s": 42.413, "e": 44.373, "w": [["Loftus", 42.413], ["người", 43.613], ["đã", 43.773], ["dành", 43.973], ["cả", 44.173]]}, {"s": 44.373, "e": 45.573, "w": [["đời", 44.373], ["để", 44.613], ["nghiên", 44.893], ["cứu", 45.093], ["về", 45.333]]}, {"s": 45.573, "e": 46.453, "w": [["lời", 45.573], ["khai", 45.773], ["nhân", 46.013], ["chứng", 46.213]]}, {"s": 46.453, "e": 47.533, "w": [["Bà", 46.453], ["đã", 46.653], ["làm", 46.813], ["một", 46.973], ["thí", 47.133], ["nghiệm", 47.293]]}, {"s": 47.533, "e": 48.733, "w": [["khi", 47.533], ["cho", 47.693], ["hai", 47.853], ["nhóm", 48.093], ["người", 48.293], ["cùng", 48.493]]}, {"s": 48.733, "e": 50.133, "w": [["xem", 48.733], ["một", 48.893], ["video", 49.053], ["tai", 49.493], ["nạn", 49.693], ["xe", 49.893]]}, {"s": 50.133, "e": 51.493, "w": [["Nhóm", 50.133], ["một", 50.333], ["được", 50.533], ["hỏi", 50.733], ["hai", 51.013], ["xe", 51.253]]}, {"s": 51.493, "e": 52.893, "w": [["va", 51.493], ["nhau", 51.773], ["chạy", 52.053], ["nhanh", 52.253], ["cỡ", 52.413], ["nào", 52.653]]}, {"s": 52.893, "e": 53.893, "w": [["Nhóm", 52.893], ["hai", 53.093], ["lại", 53.293], ["được", 53.493], ["hỏi", 53.653]]}, {"s": 53.893, "e": 55.013, "w": [["hai", 53.893], ["xe", 54.133], ["đâm", 54.373], ["sầm", 54.573], ["chạy", 54.813]]}, {"s": 55.013, "e": 55.653, "w": [["nhanh", 55.013], ["cỡ", 55.213], ["nào", 55.413]]}, {"s": 55.653, "e": 56.973, "w": [["Nhóm", 55.653], ["đâm", 55.893], ["sầm", 56.093], ["đoán", 56.333], ["nhanh", 56.533], ["hơn", 56.733]]}, {"s": 56.973, "e": 58.133, "w": [["Một", 56.973], ["tuần", 57.213], ["sau", 57.413], ["bà", 57.693], ["gài", 57.933]]}, {"s": 58.133, "e": 59.184, "w": [["một", 58.133], ["câu", 58.333], ["hỏi", 58.533], ["bẫy", 58.733], ["cho", 59.024]]}, {"s": 59.184, "e": 59.784, "w": [["cả", 59.184], ["hai", 59.344], ["nhóm", 59.504]]}, {"s": 59.784, "e": 60.544, "w": [["Bạn", 59.784], ["có", 59.984], ["thấy", 60.184], ["kính", 60.384]]}, {"s": 60.544, "e": 61.064, "w": [["vỡ", 60.544], ["hay", 60.744], ["không", 60.904]]}, {"s": 61.064, "e": 61.704, "w": [["Trong", 61.064], ["video", 61.264]]}, {"s": 61.704, "e": 62.384, "w": [["Thật", 61.704], ["ra", 61.904], ["không", 62.064], ["hề", 62.224]]}, {"s": 62.384, "e": 62.944, "w": [["có", 62.384], ["kính", 62.544], ["vỡ", 62.744]]}, {"s": 62.944, "e": 64.104, "w": [["Nhưng", 62.944], ["nhóm", 63.144], ["được", 63.304], ["nghe", 63.504], ["từ", 63.664], ["đâm", 63.904]]}, {"s": 64.104, "e": 65.504, "w": [["sầm", 64.104], ["khiến", 64.384], ["não", 64.664], ["tưởng", 64.944], ["rằng", 65.144], ["đã", 65.304]]}, {"s": 65.504, "e": 66.464, "w": [["xảy", 65.504], ["ra", 65.664], ["một", 65.784], ["vụ", 65.944], ["va", 66.104], ["chạm", 66.304]]}, {"s": 66.464, "e": 67.744, "w": [["mạnh", 66.464], ["mà", 66.664], ["va", 66.864], ["chạm", 67.064], ["thường", 67.304], ["sẽ", 67.544]]}, {"s": 67.744, "e": 68.784, "w": [["khiến", 67.744], ["chúng", 67.904], ["ta", 68.064], ["liên", 68.224], ["tưởng", 68.424], ["đến", 68.584]]}, {"s": 68.784, "e": 69.224, "w": [["vỡ", 68.784], ["kính", 68.984]]}, {"s": 69.224, "e": 70.184, "w": [["Thế", 69.224], ["là", 69.384], ["nhóm", 69.584], ["này", 69.784], ["trả", 70.024]]}, {"s": 70.184, "e": 71.224, "w": [["lời", 70.184], ["có", 70.384], ["gấp", 70.624], ["đôi", 70.864], ["so", 71.064]]}, {"s": 71.224, "e": 72.304, "w": [["với", 71.224], ["nhóm", 71.424], ["được", 71.624], ["nghe", 71.824], ["từ", 72.024]]}, {"s": 72.304, "e": 73.224, "w": [["va", 72.304], ["nhau", 72.504], ["thông", 72.744], ["thường", 72.944]]}, {"s": 73.224, "e": 73.824, "w": [["Vậy", 73.224], ["đấy", 73.504]]}, {"s": 73.824, "e": 75.464, "w": [["Chỉ", 73.824], ["một", 74.104], ["vài", 74.384], ["từ", 74.664], ["ngữ", 74.944], ["sau", 75.184]]}, {"s": 75.464, "e": 76.824, "w": [["sự", 75.464], ["việc", 75.664], ["đã", 75.904], ["ghi", 76.224], ["đè", 76.424], ["lên", 76.624]]}, {"s": 76.824, "e": 77.664, "w": [["ký", 76.824], ["ức", 76.944], ["của", 77.144], ["chúng", 77.264], ["ta", 77.344], ["một", 77.504]]}, {"s": 77.664, "e": 78.264, "w": [["cách", 77.664], ["mãnh", 77.824], ["liệt", 78.024]]}, {"s": 78.264, "e": 79.144, "w": [["Hiện", 78.264], ["tượng", 78.424], ["này", 78.544], ["hay", 78.744], ["còn", 78.944]]}, {"s": 79.144, "e": 80.894, "w": [["gọi", 79.144], ["là", 79.264], ["misinformation", 79.424], ["effect", 80.464]]}, {"s": 80.894, "e": 82.094, "w": [["Thật", 80.894], ["ra", 81.054], ["ký", 81.294], ["ức", 81.494], ["không", 81.734], ["phải", 81.934]]}, {"s": 82.094, "e": 83.494, "w": [["là", 82.094], ["một", 82.214], ["video", 82.414], ["được", 82.774], ["lưu", 82.974]]}, {"s": 83.494, "e": 84.814, "w": [["Mỗi", 83.494], ["lần", 83.694], ["nhớ", 83.894], ["não", 84.174], ["sẽ", 84.414], ["dựng", 84.654]]}, {"s": 84.814, "e": 85.974, "w": [["lại", 84.814], ["từ", 84.974], ["đầu", 85.134], ["và", 85.335], ["đôi", 85.534], ["khi", 85.734]]}, {"s": 85.974, "e": 86.815, "w": [["nó", 85.974], ["sẽ", 86.174], ["dựng", 86.375], ["sai", 86.574]]}, {"s": 86.815, "e": 88.174, "w": [["Hãy", 86.815], ["cùng", 87.014], ["follow", 87.174], ["mình", 87.614], ["để", 87.815], ["phần", 88.014]]}, {"s": 88.174, "e": 89.214, "w": [["sau", 88.174], ["chúng", 88.335], ["ta", 88.494], ["cùng", 88.654], ["tìm", 88.814], ["hiểu", 88.974]]}, {"s": 89.214, "e": 90.414, "w": [["làm", 89.214], ["sao", 89.374], ["các", 89.534], ["nhà", 89.735], ["khoa", 89.934], ["học", 90.134]]}, {"s": 90.414, "e": 91.735, "w": [["đã", 90.414], ["cài", 90.735], ["được", 91.014], ["cả", 91.214], ["một", 91.334], ["tuổi", 91.534]]}, {"s": 91.735, "e": 92.815, "w": [["thơ", 91.735], ["chưa", 91.974], ["từng", 92.174], ["xảy", 92.374], ["ra", 92.494], ["vào", 92.654]]}, {"s": 92.815, "e": 93.562, "w": [["não", 92.815], ["người", 93.054], ["nhé", 93.294]]}];
 const $ = (s) => document.querySelector(s);
 const tl = gsap.timeline({ paused: true, defaults: { immediateRender: false } });
-tl.fromTo("#barfill", { scaleX: 0 }, { scaleX: 0, duration: 0.01, immediateRender: true }, 0);
 
 // ---------- helpers ----------
 const show = (s, t) => tl.set(s, { visibility: "visible" }, t);
@@ -253,32 +279,52 @@ function crashAnim(id, t, fast) {
   }
 }
 
-// ---------- S1 ----------
-show("#s1", 0);
-push("#s1img", 0, T.S2);
-card("#s1card", Math.min(T.S1_tri, 0.3));
-pop("#ear", T.S1_nghe);
-tl.to("#ear", { scale: 1.18, duration: 0.18, yoyo: true, repeat: 1, ease: "sine.inOut" }, T.S1_nghe + 0.3);
+// ---------- background drift ----------
+tl.fromTo("#dots", { x: 0, y: 0 }, { x: 40, y: 60, duration: T.END, ease: "none" }, 0);
+tl.fromTo("#blob1", { x: 0, y: 0 }, { x: 120, y: 90, duration: T.END, ease: "sine.inOut" }, 0);
+tl.fromTo("#blob2", { x: 0, y: 0 }, { x: -140, y: -120, duration: T.END, ease: "sine.inOut" }, 0);
+tl.fromTo("#blob3", { x: 0, y: 0 }, { x: -80, y: 140, duration: T.END, ease: "sine.inOut" }, 0);
+tl.fromTo("#geo", { y: 0 }, { y: -80, duration: T.END, ease: "none" }, 0);
 
-// ---------- S2 word list ----------
-whip("#s1", "#slist", T.S2);
+// ---------- S1 game intro ----------
+show("#sgame", 0);
+tl.fromTo("#title", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" }, 0);
+tl.fromTo(".deco", { opacity: 0, scale: 0.5 }, { opacity: 0.75, scale: 1, duration: 0.3, stagger: 0.08, ease: "back.out(2)" }, 0.15);
+["#d1", "#d2", "#d3", "#d4"].forEach((d, i) => tl.to(d, { y: i % 2 ? 24 : -24, rotation: i % 2 ? 6 : -6, duration: 2.2, yoyo: true, repeat: 1, ease: "sine.inOut" }, 0.5 + i * 0.3));
+slideUp("#conf", T.S1_tri - 0.1, 60);
+const cnt = { v: 0 };
+tl.fromTo("#conffill", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power2.out" }, T.S1_tri + 0.15);
+tl.fromTo(cnt, { v: 0 }, { v: 100, duration: 0.5, ease: "power2.out", onUpdate: () => { $("#confnum").textContent = Math.round(cnt.v) + "%"; } }, T.S1_tri + 0.15);
+tl.to("#conf", { x: 8, duration: 0.05, yoyo: true, repeat: 5, ease: "none" }, T.S1_tri + 0.7);
+tl.fromTo("#conf", { scale: 1 }, { scale: 1.05, duration: 0.15, yoyo: true, repeat: 1, ease: "sine.inOut" }, T.S1_tri + 0.7);
+// "nghe kỹ 10 từ": title and decorations leave, bar shrinks to the top, 10 face-down cards fly in
+tl.to("#title", { opacity: 0, y: -80, duration: 0.3, ease: "power2.in" }, T.S1_nghe);
+tl.to(".deco", { opacity: 0, scale: 0.6, duration: 0.25 }, T.S1_nghe);
+tl.to("#conf", { scale: 0.62, y: -590, duration: 0.35, ease: "power3.inOut", transformOrigin: "50% 0%" }, T.S1_nghe);
 const WORDS = ["Giường", "Nghỉ ngơi", "Mệt", "Mơ", "Chợp mắt", "Chăn", "Ngáy", "Gối", "Ngáp", "Đêm"];
-const CX = 495, CY = 1030, SC = 120 / 56;
 WORDS.forEach((w, i) => {
-  const sx = i < 5 ? 290 : 700, sy = 290 + (i % 5) * 110;
   const el = document.createElement("div");
-  el.className = "lw"; el.id = "lw" + i; el.textContent = w;
-  el.style.left = sx + "px"; el.style.top = sy + "px";
+  el.className = "gc"; el.id = "gc" + i;
+  el.style.left = 60 + (i % 5) * 177.5 + "px"; el.style.top = (i < 5 ? 380 : 780) + "px";
+  el.innerHTML = `<div class="back">?</div><div class="front">${w}</div>`;
   $("#list").appendChild(el);
-  const t = T.list[i], next = i < 9 ? T.list[i + 1] : T.S3;
-  tl.fromTo(el, { opacity: 0, x: CX - sx, y: CY - sy, scale: SC * 0.6 }, { opacity: 1, scale: SC, duration: 0.22, ease: "back.out(2)" }, t);
-  tl.to(el, { x: 0, y: 0, scale: 1, duration: 0.28, ease: "power3.out" }, Math.max(t + 0.25, next - 0.02));
-  tl.to("#barfill", { scaleX: (i + 1) / 10, duration: 0.2, ease: "power2.out" }, t);
+  tl.fromTo(el, { opacity: 0, y: 320, rotation: i % 2 ? 14 : -14, scale: 0.6 }, { opacity: 1, y: 0, rotation: 0, scale: 1, duration: 0.35, ease: "back.out(1.6)" }, T.S1_nghe + 0.1 + i * 0.08);
+});
+
+// ---------- S2 flip one card per word ----------
+fadeIn("#bar", T.list[0], 0.2);
+WORDS.forEach((w, i) => {
+  const t = T.list[i];
+  tl.to(`#gc${i} .back`, { scaleX: 0, duration: 0.125, ease: "power1.in" }, t);
+  tl.fromTo(`#gc${i} .front`, { opacity: 1, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.125, ease: "power1.out" }, t + 0.125);
+  tl.to(`#gc${i}`, { scale: 1.08, duration: 0.12, yoyo: true, repeat: 1, ease: "sine.inOut" }, t + 0.2);
+  tl.fromTo("#barfill", { scaleX: i / 10 }, { scaleX: (i + 1) / 10, duration: 0.2, ease: "power2.out" }, t);
 });
 
 // ---------- S3 question ----------
-tl.to("#list", { opacity: 0.3, filter: "blur(5px)", duration: 0.3 }, T.S3);
-tl.to("#bar", { opacity: 0, duration: 0.3 }, T.S3);
+tl.to("#list", { opacity: 0.35, filter: "blur(24px)", duration: 0.3 }, T.S3);
+tl.to("#veil", { opacity: 1, duration: 0.3 }, T.S3);
+tl.to(["#bar", "#conf"], { opacity: 0.35, filter: "blur(10px)", duration: 0.3 }, T.S3);
 pop("#ngu", T.S3_ngu, 0.32);
 tl.fromTo(["#optY", "#optN"], { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.25, stagger: 0.08, ease: "power2.out" }, T.S3_ngu + 0.25);
 tl.fromTo("#cursor", { opacity: 0, x: 820, y: 1260 }, { opacity: 1, x: 430, y: 1160, duration: 1.6, ease: "power2.inOut" }, T.S3_ngu + 0.5);
@@ -307,18 +353,23 @@ for (let k = 0; k < 4; k++) {
 }
 fadeOut(["#ngu", "#optY", "#optN", "#cursor", "#clapper"], T.S4_kyuc - 0.1, 0.2);
 card("#s4card", T.S4_kyuc);
-tl.to("#list", { opacity: 1, filter: "blur(0px)", duration: 0.3 }, T.S4_khong);
-tl.fromTo("#scan", { opacity: 1, y: 0 }, { opacity: 1, y: 540, duration: 0.8, ease: "none" }, T.S4_khong + 0.1);
-tl.to("#scan", { opacity: 0, duration: 0.15 }, T.S4_khong + 0.9);
-pop("#slot", T.S4_khong + 0.9);
-tl.fromTo("#strike", { scaleX: 0 }, { immediateRender: true, scaleX: 1, duration: 0.3, ease: "power2.out" }, T.S4_khong + 1.3);
+// "không hề có": cards come back sharp and move up, scan, empty "ngủ" slot
+tl.to(["#bar", "#conf"], { opacity: 0, duration: 0.2 }, T.S4_khong);
+tl.to("#veil", { opacity: 0, duration: 0.3 }, T.S4_khong);
+tl.to("#list", { opacity: 1, filter: "blur(0px)", scale: 0.72, y: -180, transformOrigin: "495px 380px", duration: 0.35, ease: "power3.inOut" }, T.S4_khong);
+tl.fromTo("#scan", { opacity: 1, y: 0 }, { opacity: 1, y: 547, duration: 0.8, ease: "none" }, T.S4_khong + 0.35);
+tl.to("#scan", { opacity: 0, duration: 0.15 }, T.S4_khong + 1.15);
+pop("#slot", T.S4_khong + 1.1);
+tl.fromTo("#strike", { scaleX: 0 }, { immediateRender: true, scaleX: 1, duration: 0.3, ease: "power2.out" }, T.S4_khong + 1.5);
 
 // ---------- S5 DRM ----------
-cut("#slist", "#s5", T.S5);
+cut("#sgame", "#s5", T.S5);
 pop("#drmpill", T.S5_drm);
 slideUp("#drmframe", T.S5_drm, 60);
 push("#drmimg", T.S5_drm, T.S6);
-pop("#n1", T.S5_n1); pop("#n2", T.S5_n2); pop("#n3", T.S5_n3);
+pop("#n1", T.S5_n1);
+slideUp("#drminfo", T.S5_n1 + 0.2, 60);
+fadeOut("#drminfo", T.S5_paper - 0.05, 0.15); pop("#n2", T.S5_n2); pop("#n3", T.S5_n3);
 tl.fromTo("#p95", { opacity: 0, x: 700, rotation: -3 }, { opacity: 1, x: 0, rotation: -3, duration: 0.3, ease: "power3.out" }, T.S5_paper);
 tl.fromTo("#m95", { scaleX: 0 }, { immediateRender: true, scaleX: 1, duration: 0.3, ease: "power2.out" }, T.S5_paper + 0.35);
 pop("#c95", T.S5_paper + 0.45);
@@ -357,6 +408,8 @@ WORDS.forEach((w, i) => {
   tl.to(`#dt${i}`, { opacity: 0, duration: 0.1 }, t + 0.8);
 });
 tl.to("#net .ln", { stroke: "#8CC4E3", duration: 0.4 }, T.S6_kich + 0.3);
+pop("#s6top", T.S6_mang);
+fadeOut("#s6top", T.S6_term - 0.1, 0.15);
 card("#s6card", T.S6_term);
 fadeOut("#s6card", T.S6_nghedu, 0.25);
 tl.to("#corefill", { opacity: 1, duration: 0.25 }, T.S6_sang);
@@ -409,6 +462,9 @@ for (let i = 7; i >= 1; i--) tl.to(`#pg${i}`, { rotationX: -100, opacity: 0, dur
 pop("#callab", T.S9 + 0.8);
 tl.to(["#cal", "#callab"], { opacity: 0, y: -60, duration: 0.2 }, T.S9_bay - 0.1);
 card("#s9card", T.S9_bay);
+pop("#glassq", T.S9_bay + 0.3);
+tl.to("#glassq", { rotation: 3, duration: 0.3, yoyo: true, repeat: 5, ease: "sine.inOut" }, T.S9_bay + 0.7);
+fadeOut("#glassq", T.S9_khong - 0.1, 0.15);
 $("#mini").innerHTML = crash("minicrash");
 pop("#mini", T.S9_khong);
 crashAnim("minicrash", T.S9_khong + 0.15, false);
@@ -462,6 +518,9 @@ tl.fromTo("#logo", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration:
 pop("#follow", T.S12_follow);
 tl.to("#follow", { scale: 1.12, duration: 0.18, yoyo: true, repeat: 1, ease: "sine.inOut" }, T.S12_follow + 0.35);
 card("#s12card", T.S12_phan);
+tl.fromTo("#s12icons > div", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.3, stagger: 0.08, ease: "back.out(2)" }, T.S12_phan + 0.3);
+show("#s12icons", T.S12_phan);
+tl.set("#s12icons", { opacity: 1 }, T.S12_phan);
 
 // ---------- captions ----------
 const KEY = /^(drm|spreading|activation|đâm|sầm|misinformation|effect|giả)$/i;
