@@ -139,8 +139,10 @@ T = {k: (round(v, 3) if isinstance(v, float) else v) for k, v in T.items()}
 # ---------- captions: script text, voice timing; none during the word list ----------
 starts = {T[k] for k in T if re.fullmatch(r"S\d+", k)}
 sentences, cur = [], []
-for w, t in WORDS:
-    if T["S2"] - 0.05 <= t < T["S3"] - 0.05:
+i0 = script.index("Giường.")
+i1 = script.index("Đêm.")
+for i, (w, t) in enumerate(WORDS):
+    if i0 <= i <= i1:
         continue
     if cur and (t in starts and cur[-1][1] < t):
         sentences.append(cur)
