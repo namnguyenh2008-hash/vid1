@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1440, height=2560" />
+<script src="vendor/gsap.min.js"></script>
+<style>
+@font-face{font-family:"BVP";font-weight:600;src:url("vendor/fonts/bvp-vietnamese-600.woff2") format("woff2");unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+@font-face{font-family:"BVP";font-weight:600;src:url("vendor/fonts/bvp-latin-600.woff2") format("woff2")}
+@font-face{font-family:"BVP";font-weight:800;src:url("vendor/fonts/bvp-vietnamese-800.woff2") format("woff2");unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+@font-face{font-family:"BVP";font-weight:800;src:url("vendor/fonts/bvp-latin-800.woff2") format("woff2")}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1440px;height:2560px;overflow:hidden;background:#EAF4FB}
+#root{position:relative;width:100%;height:100%;font-family:"BVP",sans-serif;color:#1A1A1A;overflow:hidden}
+#stage{position:absolute;inset:0;z-index:1}
+.scene{position:absolute;inset:0;visibility:hidden;overflow:hidden}
+.abs{position:absolute}
+.hid{opacity:0}
+.full{position:absolute;inset:0;width:100%;height:100%}
+.card{position:absolute;left:80px;width:1160px;padding:48px 60px 56px;border-radius:40px;background:rgba(255,255,255,.72);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 16px 50px rgba(0,0,0,.12);border:4px solid rgba(60,232,180,.7);text-align:center}
+.tag{display:block;font-size:42px;font-weight:800;letter-spacing:.14em;color:#0077B6;margin-bottom:14px}
+.head{display:block;font-size:130px;font-weight:800;line-height:1.1;letter-spacing:-.01em}
+.sub{display:block;font-size:48px;font-weight:600;margin-top:20px}
+.pill{display:inline-block;background:#0077B6;color:#fff;border-radius:999px;padding:0 .32em;line-height:1.15}
+.chip{position:absolute;display:inline-block;padding:14px 34px;border-radius:999px;background:#fff;border:4px solid #0077B6;color:#0077B6;font-weight:800;font-size:46px;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.mchip{border-color:#3CE8B4;color:#0A8F6A}
+.bluepill{position:absolute;padding:14px 46px;border-radius:999px;background:#0077B6;color:#fff;font-weight:800;font-size:60px;white-space:nowrap}
+.photo{position:absolute;border-radius:40px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.16);background:#fff}
+.photo>.img{position:absolute;inset:0;background-size:cover;background-position:center}
+.paper{position:absolute;background:#fff;padding:22px;border-radius:12px;box-shadow:0 22px 60px rgba(0,0,0,.18)}
+.paper img{display:block;width:100%}
+.marker{position:absolute;background:#0077B6;opacity:.28;border-radius:6px;transform-origin:left center}
+.bubble{position:absolute;background:#fff;border:5px solid #1A1A1A;border-radius:44px;font-weight:600;text-align:center}
+.pol{position:absolute;width:420px;height:500px;background:#fff;padding:22px 22px 90px;border-radius:14px;box-shadow:0 16px 40px rgba(0,0,0,.18)}
+.pol .img{width:100%;height:100%;border-radius:6px;background-size:cover}
+.pol .lab{position:absolute;left:0;right:0;bottom:18px;text-align:center;font-size:44px;font-weight:800;color:#0A8F6A}
+.rcard{position:absolute;left:80px;width:1160px;height:230px;display:flex;align-items:center;gap:40px;padding:0 44px;border-radius:40px;background:rgba(255,255,255,.8);border:4px solid rgba(60,232,180,.7);box-shadow:0 12px 40px rgba(0,0,0,.1);font-size:66px;font-weight:800}
+.rcard .ic{flex:none;width:150px;height:150px;border-radius:32px;background:#EAF4FB;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.person{position:absolute;width:110px;height:130px}
+#caps{position:absolute;inset:0;z-index:20;pointer-events:none}
+.cap{position:absolute;left:80px;width:1160px;bottom:640px;display:flex;justify-content:center;visibility:hidden}
+.cap .in{max-width:1160px;padding:16px 40px 22px;border-radius:34px;background:rgba(0,0,0,.55);color:#fff;font-size:66px;font-weight:600;line-height:1.28;text-align:center}
+.cap span{opacity:.45}
+.cap span.k{color:#4FB3E8}
+#ratwrap{position:absolute;left:690px;top:990px;width:650px;height:700px;z-index:10}
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="ep02" data-start="0" data-duration="67.858" data-width="1440" data-height="2560">
+<audio id="vo" src="assets/vo.wav" data-start="0" data-duration="67.058" data-track-index="9" data-volume="1"></audio>
+
+<div id="stage" class="clip" data-start="0" data-duration="67.858" data-track-index="0">
+ <div id="bgl" class="abs" style="inset:0;background:linear-gradient(180deg,#EAF4FB 0%,#F5FAFD 55%,#EDFAF4 100%);overflow:hidden">
+  <div id="dots" class="abs" style="left:-100px;top:-100px;width:1660px;height:2780px;opacity:.1;background-image:radial-gradient(#0077B6 3px,transparent 3.6px);background-size:52px 52px"></div>
+  <div id="blob1" class="abs" style="left:-340px;top:-260px;width:940px;height:940px;border-radius:50%;background:radial-gradient(circle,rgba(0,119,182,.13),transparent 70%)"></div>
+  <div id="blob2" class="abs" style="left:780px;top:1650px;width:1000px;height:1000px;border-radius:50%;background:radial-gradient(circle,rgba(60,232,180,.2),transparent 70%)"></div>
+  <div id="blob3" class="abs" style="left:960px;top:340px;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(60,232,180,.12),transparent 70%)"></div>
+ </div>
+
+ <!-- S1 -->
+ <div class="scene" id="s1">
+  <img class="abs hid" id="logo1" src="assets/logo.svg" style="left:1120px;top:200px;width:120px;height:120px;border-radius:24px">
+  <div class="card hid" id="s1card" style="top:420px"><span class="tag">TẬP 2 · KÝ ỨC SAI LỆCH</span><span class="head" style="font-size:140px">Cài ký ức giả</span><span class="pill" style="font-size:64px;font-weight:800;margin-top:24px;padding:8px 40px">(Lost in a mall)</span></div>
+  <div class="abs hid" id="thumb" style="left:80px;top:210px;width:330px;height:190px;border-radius:24px;background:#fff;border:4px solid #3CE8B4;box-shadow:0 12px 30px rgba(0,0,0,.15);text-align:center;padding-top:22px">
+   <div style="font-size:26px;font-weight:800;color:#0A8F6A;letter-spacing:.1em">TẬP 1</div><div style="font-size:88px;font-weight:800;color:#0077B6;line-height:1.1">ngủ?</div></div>
+  <div class="abs" id="s1deco" style="left:80px;top:1080px;width:1160px;height:560px"></div>
+ </div>
+
+ <!-- S2 -->
+ <div class="scene" id="s2">
+  <div class="full" id="mallbg" style="background:url(assets/mall.jpg) center/cover;filter:blur(6px);inset:-40px;width:auto;height:auto"></div>
+  <div class="full" style="background:rgba(255,255,255,.25)"></div>
+  <div class="abs hid" id="cnt" style="left:600px;top:250px;width:240px;height:240px;border-radius:50%;background:#0077B6;border:8px solid #3CE8B4;color:#fff;text-align:center;line-height:220px;font-size:130px;font-weight:800;box-shadow:0 14px 40px rgba(0,0,0,.2)"><span id="cntn">1</span></div>
+  <div class="abs hid" id="cntlab" style="left:0;width:1440px;top:500px;text-align:center;font-size:48px;font-weight:800;color:#0077B6">TUỔI</div>
+  <div class="card hid" id="s2card" style="top:600px"><span class="tag">CÂU HỎI HÔM NAY</span><span class="head" style="font-size:120px">Hồi 5 tuổi, bạn từng <span class="pill">bị lạc</span>?</span></div>
+ </div>
+
+ <!-- S3 -->
+ <div class="scene" id="s3">
+  <div class="photo" id="pencilph" style="left:80px;top:220px;width:620px;height:800px"><div class="img" id="pencilimg" style="background-image:url(assets/hand_pencil.jpg)"></div><div class="img hid" id="tomauimg" style="background-image:url(assets/tomau.jpg)"></div></div>
+  <div class="card hid" id="s3card" style="left:740px;top:300px;width:500px;padding:40px 34px"><span class="tag">KÝ ỨC GIỐNG</span><span class="head" style="font-size:88px">tranh bút chì</span>
+   <svg width="200" height="200" viewBox="0 0 64 64" style="margin-top:20px"><path d="M12 52l6-16 26-26 10 10-26 26z" fill="#fff" stroke="#0077B6" stroke-width="4" stroke-linejoin="round"/><path d="M40 14l10 10" stroke="#3CE8B4" stroke-width="5"/><path d="M12 52l6-16 10 10z" fill="#F5D38B" stroke="#0077B6" stroke-width="4" stroke-linejoin="round"/></svg></div>
+  <div class="abs" id="drawbox" style="left:80px;top:1060px;width:680px;height:600px;border-radius:40px;background:rgba(255,255,255,.85);border:4px solid rgba(60,232,180,.7);box-shadow:0 12px 40px rgba(0,0,0,.1);opacity:0">
+   <svg id="drawing" width="680" height="600" viewBox="0 0 680 600"><g fill="none" stroke="#1A1A1A" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path id="roofred" d="M120 270L270 140 420 270Z" fill="#E63946" stroke="none" opacity="0"/>
+    <path class="st" d="M140 270v200h260v-200"/><path class="st" d="M110 280L270 140 430 280"/><path class="st" d="M240 470v-110h60v110"/><path class="st" d="M330 330h50v50h-50z"/>
+    <circle class="st" cx="530" cy="320" r="34"/><path class="st" d="M530 354v90M530 380l-40 30M530 380l40 30M530 444l-30 60M530 444l30 60"/>
+    <path class="st" d="M60 500h570"/><circle class="st" cx="590" cy="110" r="36"/></g></svg>
+  </div>
+  <div class="abs hid" id="hand2" style="left:560px;top:1000px"><svg width="300" height="220" viewBox="0 0 150 110"><path d="M150 50H70q-12 0-12 12t12 12h20q-8 0-8 8t8 8h-6q-8 0-8 8t8 8h40l26-10z" fill="#FFD9C2" stroke="#1A1A1A" stroke-width="4" stroke-linejoin="round"/><path d="M60 62L8 40l6-10 52 22z" fill="#E63946" stroke="#1A1A1A" stroke-width="4" stroke-linejoin="round"/></svg></div>
+  <div class="chip hid" id="nguoikhac" style="left:470px;top:1560px;border-color:#E63946;color:#E63946">người khác</div>
+ </div>
+
+ <!-- S4 -->
+ <div class="scene" id="s4">
+  <div class="bluepill hid" id="year" style="left:510px;top:220px;font-size:110px;padding:10px 60px">1995</div>
+  <div class="paper hid" id="paper" style="left:100px;top:440px;width:640px"><img src="assets/1995_paper.png"><div class="marker" id="mk" style="left:6%;top:8%;width:88%;height:9%"></div></div>
+  <div class="photo hid" id="lofph" style="left:840px;top:440px;width:400px;height:400px;border-radius:50%"><div class="img" id="lofimg" style="background-image:url(assets/elizabeth_loftus.jpg);background-position:42% 25%"></div></div>
+  <div class="card hid" id="lofcard" style="left:780px;top:880px;width:460px;padding:30px 26px"><span class="head" style="font-size:58px">Elizabeth Loftus</span><span class="sub" style="font-size:40px;margin-top:8px">nhà tâm lý học</span><span class="chip mchip" style="position:relative;font-size:34px;margin-top:16px;padding:8px 24px">ở tập trước</span></div>
+  <div class="chip hid" id="pick" style="left:620px;top:1210px;font-size:42px">Jacqueline Pickrell · cộng sự</div>
+ </div>
+
+ <!-- S5 -->
+ <div class="scene" id="s5">
+  <div id="grid5" class="abs" style="left:80px;top:220px;width:1160px;height:420px"></div>
+  <div class="bluepill hid" id="c24" style="left:1010px;top:560px;font-size:60px;padding:8px 36px"><span id="c24n">0</span> người</div>
+  <div id="pols" class="abs" style="left:0;top:0;width:1440px;height:2560px"></div>
+  <div class="abs hid" id="walk" style="left:80px;top:1300px;width:620px;height:380px"></div>
+ </div>
+
+ <!-- S6 -->
+ <div class="scene" id="s6">
+  <div class="photo hid" id="intph" style="left:80px;top:220px;width:560px;height:750px"><div class="img" id="intimg" style="background-image:url(assets/interview.jpg)"></div></div>
+  <div class="bubble hid" id="qb1" style="left:690px;top:240px;width:550px;padding:34px;font-size:46px">“Bạn còn nhớ gì về chuyện này không?”</div>
+  <div class="bubble hid" id="qb2" style="left:690px;top:520px;width:550px;padding:34px;font-size:46px">“Bạn còn nhớ gì về chuyện này không?”</div>
+  <div class="bubble hid" id="qb3" style="left:690px;top:800px;width:550px;padding:34px;font-size:46px">“Bạn còn nhớ gì về chuyện này không?”</div>
+  <div class="abs hid" id="sess" style="left:80px;top:1030px;width:600px;display:flex;align-items:center;gap:14px"></div>
+ </div>
+
+ <!-- S7 -->
+ <div class="scene" id="s7">
+  <div id="grid7" class="abs" style="left:80px;top:220px;width:1160px;height:420px"></div>
+  <div class="card hid" id="stat" style="left:80px;top:1060px;width:560px;padding:40px 30px"><span class="tag">KẾT QUẢ</span><span class="head" style="font-size:150px;color:#0077B6">≈ 1/4</span><span class="sub">6 trên 24 người</span></div>
+  <div class="bubble hid" id="kb1" style="left:120px;top:690px;width:330px;height:250px;padding:20px"></div>
+  <div class="bubble hid" id="kb2" style="left:620px;top:690px;width:330px;height:250px;padding:20px"></div>
+ </div>
+
+ <!-- S8 -->
+ <div class="scene" id="s8">
+  <div class="abs hid" id="thought8" style="left:220px;top:260px;width:1000px;height:640px">
+   <div class="bubble" style="position:absolute;inset:0;border-radius:200px;overflow:hidden;background:#fff"><svg width="1000" height="640" viewBox="0 0 1000 640" id="legs"></svg></div>
+   <div class="bubble" style="left:520px;top:660px;width:70px;height:70px;border-radius:50%"></div>
+   <div class="bubble" style="left:560px;top:760px;width:44px;height:44px;border-radius:50%"></div>
+  </div>
+ </div>
+
+ <!-- S9 -->
+ <div class="scene" id="s9">
+  <div class="full hid" id="brainbg" style="background:url(assets/brain_neurons.jpg) center/cover;filter:blur(8px)"></div>
+  <div class="full hid" id="brainveil" style="background:rgba(255,255,255,.35)"></div>
+  <div class="rcard hid" id="r1" style="top:240px"><div class="ic"><svg width="110" height="110" viewBox="0 0 64 64"><path d="M10 22h14a6 6 0 1 1 12 0h14v14a6 6 0 1 0 0 12v12H10V48a6 6 0 1 0 0-12z" fill="#3CE8B4" stroke="#0077B6" stroke-width="4" stroke-linejoin="round"/></svg></div>Nghe hợp lý</div>
+  <div class="rcard hid" id="r2" style="top:510px"><div class="ic" style="background:url(assets/vintage.jpg) 30% 40%/cover"></div>Người thân xác nhận<svg width="90" height="90" viewBox="0 0 64 64" style="margin-left:auto"><circle cx="22" cy="20" r="9" fill="#0077B6"/><circle cx="44" cy="22" r="8" fill="#3CE8B4"/><path d="M8 54c0-12 6-20 14-20s14 8 14 20zM32 54c0-10 5-17 12-17s12 7 12 17z" fill="#0077B6"/></svg></div>
+  <div class="rcard hid" id="r3" style="top:780px"><div class="ic"><svg width="120" height="104" viewBox="0 0 150 130"><path d="M75 18C60 2 30 6 26 28 8 32 4 58 18 70 8 86 20 108 42 106 50 124 72 124 75 110 78 124 100 124 108 106 130 108 142 86 132 70 146 58 142 32 124 28 120 6 90 2 75 18Z" fill="#fff" stroke="#0077B6" stroke-width="9" stroke-linejoin="round"/><path d="M75 18v92" stroke="#3CE8B4" stroke-width="8"/></svg></div>Lẫn nguồn gốc</div>
+  <div class="bubble hid" id="bA" style="left:140px;top:560px;width:460px;padding:44px 20px;font-size:70px;font-weight:800;border-color:#0077B6;color:#0077B6">Nghe kể</div>
+  <div class="bubble hid" id="bB" style="left:780px;top:560px;width:460px;padding:44px 20px;font-size:70px;font-weight:800;border-color:#3CE8B4;color:#0A8F6A">Tự trải qua</div>
+  <div class="bubble hid" id="bM" style="left:420px;top:540px;width:600px;padding:40px 20px;font-size:62px;font-weight:800;border-color:#0077B6;background:linear-gradient(90deg,#DDEFFA,#DDFBF1)">Nghe kể = Tự trải qua?</div>
+  <div class="card hid" id="term" style="top:300px"><span class="tag">HIỆN TƯỢNG</span><span class="head" style="font-size:120px"><span class="pill">Source confusion</span></span><span class="sub">nhầm lẫn nguồn gốc ký ức</span></div>
+ </div>
+
+ <!-- S10 -->
+ <div class="scene" id="s10">
+  <img class="abs hid" id="avatar" src="assets/logo_rat_avatar.png" style="left:520px;top:220px;width:400px;height:400px;border-radius:50%;box-shadow:0 16px 40px rgba(0,0,0,.15);border:8px solid #fff">
+  <div class="card hid" id="s10card" style="top:680px"><span class="tag">TẬP SAU</span><span class="head" style="font-size:110px">Ký ức <span class="pill">khắc sâu</span> cũng sai?</span><span class="sub" style="color:#0A8F6A">Flashbulb memory</span></div>
+  <div class="bluepill hid" id="follow" style="left:220px;top:1260px;font-size:70px">Follow</div>
+ </div>
+</div>
+
+<div id="ratwrap"><svg id="rat" width="650" height="700" viewBox="0 -20 520 560" overflow="visible"></svg></div>
+<div id="caps" class="clip" data-start="0" data-duration="67.858" data-track-index="3"></div>
+</div>
+
+<script>
+const T = {"S1": 0.0, "S1_prev": 0.0, "S1_rat": 3.32, "S2": 4.96, "S2_5": 6.96, "S2_q": 9.36, "S3": 10.0, "S3_tranh": 12.96, "S3_to": 16.16, "S3_do": 18.92, "S3_quen": 21.514, "S4": 23.314, "S4_nha": 24.674, "S4_lof": 25.394, "S4_pick": 26.754, "S5": 28.994, "S5_24": 29.954, "S5_3": 31.554, "S5_len": 33.354, "S5_bia": 33.914, "S5_ttm": 36.354, "S5_khoc": 37.114, "S5_ba": 38.514, "S6": 39.805, "S6_hoi": 41.565, "S7": 44.925, "S7_cu": 45.325, "S7_mot": 46.485, "S7_ke": 49.485, "S8": 50.485, "S8_lac": 52.085, "S9": 52.645, "S9_r1": 53.925, "S9_r2": 55.085, "S9_r3": 57.454, "S9_pb": 58.174, "S9_term": 62.614, "S10": 65.134, "S10_tap": 65.774, "END": 67.858, "WORDS": [0.0, 0.24, 0.48, 0.72, 0.88, 1.12, 1.44, 1.6, 1.8, 2.04, 2.28, 2.44, 2.6, 2.88, 3.08, 3.32, 3.6, 3.84, 4.0, 4.16, 4.32, 4.52, 4.72, 4.96, 5.12, 5.32, 5.52, 5.68, 5.92, 6.16, 6.4, 6.68, 6.96, 7.24, 7.52, 7.8, 8.0, 8.2, 8.4, 8.6, 8.76, 8.96, 9.16, 9.36, 9.52, 9.72, 10.0, 10.2, 10.44, 10.68, 11.0, 11.32, 11.52, 11.72, 11.88, 12.12, 12.28, 12.56, 12.76, 12.96, 13.12, 13.36, 13.6, 13.8, 13.96, 14.2, 14.44, 14.64, 14.88, 15.04, 15.32, 15.56, 15.76, 15.92, 16.16, 16.4, 16.56, 16.72, 16.92, 17.12, 17.24, 17.44, 17.6, 17.76, 17.92, 18.2, 18.36, 18.56, 18.72, 18.92, 19.12, 19.36, 19.474, 19.634, 19.834, 20.034, 20.234, 20.434, 20.714, 20.954, 21.194, 21.514, 21.754, 21.994, 22.234, 22.434, 22.594, 22.754, 22.954, 23.154, 23.314, 23.514, 23.634, 23.794, 23.954, 24.114, 24.274, 24.434, 24.674, 24.874, 25.034, 25.194, 25.394, 26.594, 26.754, 26.914, 27.154, 27.594, 28.194, 28.394, 28.594, 28.754, 28.994, 29.194, 29.394, 29.594, 29.794, 29.954, 30.114, 30.314, 30.514, 30.754, 30.914, 31.114, 31.354, 31.554, 31.754, 31.994, 32.194, 32.394, 32.594, 32.874, 33.114, 33.354, 33.634, 33.794, 33.914, 34.114, 34.394, 34.594, 34.754, 34.994, 35.234, 35.474, 35.674, 35.914, 36.154, 36.354, 36.514, 36.714, 36.834, 37.114, 37.434, 37.674, 37.874, 38.114, 38.314, 38.514, 38.674, 38.914, 39.114, 39.354, 39.554, 39.714, 39.805, 39.965, 40.125, 40.285, 40.525, 40.725, 40.885, 41.165, 41.365, 41.565, 41.765, 41.965, 42.125, 42.365, 42.565, 42.685, 42.925, 43.085, 43.325, 43.565, 43.765, 43.965, 44.165, 44.325, 44.525, 44.685, 44.925, 45.085, 45.325, 45.565, 45.805, 46.045, 46.285, 46.485, 46.685, 46.965, 47.205, 47.525, 47.845, 48.085, 48.285, 48.485, 48.725, 48.925, 49.085, 49.285, 49.485, 49.725, 49.885, 50.045, 50.245, 50.485, 50.685, 50.925, 51.125, 51.365, 51.565, 51.765, 51.925, 52.085, 52.285, 52.445, 52.645, 52.845, 53.045, 53.285, 53.525, 53.725, 53.925, 54.085, 54.325, 54.565, 54.805, 55.085, 55.405, 55.685, 55.965, 56.174, 56.374, 56.614, 56.814, 57.014, 57.214, 57.454, 57.774, 57.934, 58.174, 58.334, 58.534, 58.774, 58.974, 59.134, 59.374, 59.574, 59.814, 60.094, 60.294, 60.534, 60.774, 60.974, 61.214, 61.374, 61.614, 61.814, 62.014, 62.214, 62.414, 62.614, 62.974, 63.694, 63.974, 64.254, 64.454, 64.694, 64.814, 65.134, 65.614, 65.774, 65.974, 66.374, 66.694, 66.934]};
+const CAPS = [{"s": 0.0, "e": 1.12, "w": [["Tập", 0.0], ["trước", 0.24], ["bạn", 0.48], ["đã", 0.72], ["biết", 0.88]]}, {"s": 1.12, "e": 2.28, "w": [["não", 1.12], ["có", 1.44], ["thể", 1.6], ["tự", 1.8], ["bịa", 2.04]]}, {"s": 2.28, "e": 2.88, "w": [["ra", 2.28], ["ký", 2.44], ["ức", 2.6]]}, {"s": 2.88, "e": 4.0, "w": [["Từ", 2.88], ["giờ", 3.08], ["chuột", 3.32], ["tím", 3.6], ["sẽ", 3.84]]}, {"s": 4.0, "e": 4.96, "w": [["dẫn", 4.0], ["bạn", 4.16], ["đi", 4.32], ["tiếp", 4.52], ["và", 4.72]]}, {"s": 4.96, "e": 6.16, "w": [["Câu", 4.96], ["hỏi", 5.12], ["hôm", 5.32], ["nay", 5.52], ["là", 5.68], ["nếu", 5.92]]}, {"s": 6.16, "e": 7.8, "w": [["mình", 6.16], ["nói", 6.4], ["hồi", 6.68], ["5", 6.96], ["tuổi", 7.24], ["bạn", 7.52]]}, {"s": 7.8, "e": 8.96, "w": [["từng", 7.8], ["bị", 8.0], ["lạc", 8.2], ["trong", 8.4], ["siêu", 8.6], ["thị", 8.76]]}, {"s": 8.96, "e": 10.0, "w": [["Bạn", 8.96], ["có", 9.16], ["nhớ", 9.36], ["ra", 9.52], ["không", 9.72]]}, {"s": 10.0, "e": 11.0, "w": [["Nghe", 10.0], ["thì", 10.2], ["vô", 10.44], ["lý", 10.68]]}, {"s": 11.0, "e": 12.12, "w": [["Nhưng", 11.0], ["thử", 11.32], ["nghĩ", 11.52], ["thế", 11.72], ["này", 11.88]]}, {"s": 12.12, "e": 13.36, "w": [["Ký", 12.12], ["ức", 12.28], ["giống", 12.56], ["một", 12.76], ["bức", 12.96], ["tranh", 13.12]]}, {"s": 13.36, "e": 14.44, "w": [["bạn", 13.36], ["tô", 13.6], ["bằng", 13.8], ["bút", 13.96], ["chì", 14.2]]}, {"s": 14.44, "e": 15.76, "w": [["Mỗi", 14.44], ["lần", 14.64], ["nhớ", 14.88], ["lại", 15.04], ["bạn", 15.32], ["lấy", 15.56]]}, {"s": 15.76, "e": 16.92, "w": [["nó", 15.76], ["ra", 15.92], ["tô", 16.16], ["thêm", 16.4], ["một", 16.56], ["chút", 16.72]]}, {"s": 16.92, "e": 17.76, "w": [["Nếu", 16.92], ["có", 17.12], ["người", 17.24], ["đứng", 17.44], ["bên", 17.6]]}, {"s": 17.76, "e": 18.72, "w": [["cạnh", 17.76], ["nói", 17.92], ["chỗ", 18.2], ["này", 18.36], ["hình", 18.56]]}, {"s": 18.72, "e": 19.474, "w": [["như", 18.72], ["màu", 18.92], ["đỏ", 19.12], ["đấy", 19.36]]}, {"s": 19.474, "e": 20.714, "w": [["Bạn", 19.474], ["sẽ", 19.634], ["tô", 19.834], ["màu", 20.034], ["đỏ", 20.234], ["vào", 20.434]]}, {"s": 20.714, "e": 22.234, "w": [["Lâu", 20.714], ["dần", 20.954], ["bạn", 21.194], ["quên", 21.514], ["mất", 21.754], ["màu", 21.994]]}, {"s": 22.234, "e": 23.314, "w": [["đỏ", 22.234], ["đó", 22.434], ["là", 22.594], ["của", 22.754], ["người", 22.954], ["khác", 23.154]]}, {"s": 23.314, "e": 25.394, "w": [["Năm", 23.314], ["1995", 23.954], ["nhà", 24.674], ["tâm", 24.874], ["lý", 25.034], ["học", 25.194]]}, {"s": 25.394, "e": 27.594, "w": [["Elizabeth", 25.394], ["Loftus", 25.394], ["và", 26.594], ["cộng", 26.754], ["sự", 26.914], ["Jacqueline", 27.154]]}, {"s": 27.594, "e": 28.994, "w": [["Pickrell", 27.594], ["thử", 28.194], ["đúng", 28.394], ["điều", 28.594], ["đó", 28.754]]}, {"s": 28.994, "e": 30.514, "w": [["Họ", 28.994], ["hỏi", 29.194], ["người", 29.394], ["thân", 29.594], ["của", 29.794], ["24", 29.954]]}, {"s": 30.514, "e": 31.754, "w": [["người", 30.514], ["tham", 30.754], ["gia", 30.914], ["để", 31.114], ["lấy", 31.354], ["3", 31.554]]}, {"s": 31.754, "e": 32.874, "w": [["chuyện", 31.754], ["tuổi", 31.994], ["thơ", 32.194], ["có", 32.394], ["thật", 32.594]]}, {"s": 32.874, "e": 33.794, "w": [["Rồi", 32.874], ["họ", 33.114], ["lén", 33.354], ["thêm", 33.634]]}, {"s": 33.794, "e": 34.394, "w": [["1", 33.794], ["chuyện", 33.914], ["bịa", 34.114]]}, {"s": 34.394, "e": 35.674, "w": [["Hồi", 34.394], ["khoảng", 34.594], ["5", 34.754], ["tuổi", 34.994], ["người", 35.234], ["đó", 35.474]]}, {"s": 35.674, "e": 36.834, "w": [["bị", 35.674], ["lạc", 35.914], ["trong", 36.154], ["trung", 36.354], ["tâm", 36.514], ["thương", 36.714]]}, {"s": 36.834, "e": 38.314, "w": [["mại", 36.834], ["khóc", 37.114], ["rất", 37.434], ["to", 37.674], ["và", 37.874], ["được", 38.114]]}, {"s": 38.314, "e": 39.554, "w": [["một", 38.314], ["bà", 38.514], ["cụ", 38.674], ["dẫn", 38.914], ["về", 39.114], ["với", 39.354]]}, {"s": 39.554, "e": 39.805, "w": [["gia", 39.554], ["đình", 39.714]]}, {"s": 39.805, "e": 40.885, "w": [["Người", 39.805], ["tham", 39.965], ["gia", 40.125], ["đọc", 40.285], ["cả", 40.525], ["4", 40.725]]}, {"s": 40.885, "e": 42.125, "w": [["chuyện", 40.885], ["rồi", 41.165], ["được", 41.365], ["hỏi", 41.565], ["đi", 41.765], ["hỏi", 41.965]]}, {"s": 42.125, "e": 43.325, "w": [["lại", 42.125], ["qua", 42.365], ["vài", 42.565], ["buổi", 42.685], ["phỏng", 42.925], ["vấn", 43.085]]}, {"s": 43.325, "e": 44.165, "w": [["Bạn", 43.325], ["còn", 43.565], ["nhớ", 43.765], ["gì", 43.965]]}, {"s": 44.165, "e": 44.925, "w": [["về", 44.165], ["chuyện", 44.325], ["này", 44.525], ["không", 44.685]]}, {"s": 44.925, "e": 46.285, "w": [["Kết", 44.925], ["quả", 45.085], ["cứ", 45.325], ["4", 45.565], ["người", 45.805], ["thì", 46.045]]}, {"s": 46.285, "e": 47.845, "w": [["có", 46.285], ["1", 46.485], ["người", 46.685], ["bắt", 46.965], ["đầu", 47.205], ["nhớ", 47.525]]}, {"s": 47.845, "e": 48.925, "w": [["ra", 47.845], ["lần", 48.085], ["bị", 48.285], ["lạc", 48.485], ["đó", 48.725]]}, {"s": 48.925, "e": 49.725, "w": [["Có", 48.925], ["người", 49.085], ["còn", 49.285], ["tự", 49.485]]}, {"s": 49.725, "e": 50.485, "w": [["kể", 49.725], ["thêm", 49.885], ["chi", 50.045], ["tiết", 50.245]]}, {"s": 50.485, "e": 51.765, "w": [["Chuột", 50.485], ["tím", 50.685], ["cũng", 50.925], ["suýt", 51.125], ["nhớ", 51.365], ["ra", 51.565]]}, {"s": 51.765, "e": 52.645, "w": [["mình", 51.765], ["từng", 51.925], ["bị", 52.085], ["lạc", 52.285], ["đấy", 52.445]]}, {"s": 52.645, "e": 53.045, "w": [["Vì", 52.645], ["sao", 52.845]]}, {"s": 53.045, "e": 54.325, "w": [["Vì", 53.045], ["chuyện", 53.285], ["nghe", 53.525], ["rất", 53.725], ["hợp", 53.925], ["lý", 54.085]]}, {"s": 54.325, "e": 55.405, "w": [["Vì", 54.325], ["người", 54.565], ["thân", 54.805], ["xác", 55.085]]}, {"s": 55.405, "e": 56.174, "w": [["nhận", 55.405], ["là", 55.685], ["có", 55.965]]}, {"s": 56.174, "e": 57.214, "w": [["Và", 56.174], ["vì", 56.374], ["sau", 56.614], ["một", 56.814], ["thời", 57.014]]}, {"s": 57.214, "e": 58.334, "w": [["gian", 57.214], ["não", 57.454], ["không", 57.774], ["còn", 57.934], ["phân", 58.174]]}, {"s": 58.334, "e": 59.374, "w": [["biệt", 58.334], ["được", 58.534], ["đâu", 58.774], ["là", 58.974], ["chuyện", 59.134]]}, {"s": 59.374, "e": 60.534, "w": [["mình", 59.374], ["nghe", 59.574], ["kể", 59.814], ["đâu", 60.094], ["là", 60.294]]}, {"s": 60.534, "e": 61.614, "w": [["chuyện", 60.534], ["mình", 60.774], ["tự", 60.974], ["trải", 61.214], ["qua", 61.374]]}, {"s": 61.614, "e": 62.414, "w": [["Hiện", 61.614], ["tượng", 61.814], ["này", 62.014], ["gọi", 62.214]]}, {"s": 62.414, "e": 63.694, "w": [["là", 62.414], ["source", 62.614], ["confusion", 62.974]]}, {"s": 63.694, "e": 65.134, "w": [["Nhầm", 63.694], ["lẫn", 63.974], ["nguồn", 64.254], ["gốc", 64.454], ["ký", 64.694], ["ức", 64.814]]}, {"s": 65.134, "e": 66.374, "w": [["Follow", 65.134], ["để", 65.614], ["tập", 65.774], ["sau", 65.974]]}, {"s": 66.374, "e": 67.058, "w": [["tím", 66.374], ["kể", 66.694], ["tiếp", 66.934]]}];
+const $ = (s) => document.querySelector(s);
+const tl = gsap.timeline({ paused: true, defaults: { immediateRender: false } });
+const show = (s, t) => tl.set(s, { visibility: "visible" }, t);
+const hide = (s, t) => tl.set(s, { visibility: "hidden" }, t);
+const fadeIn = (s, t, d = 0.25) => tl.fromTo(s, { opacity: 0 }, { opacity: 1, duration: d, ease: "power2.out" }, t);
+const fadeOut = (s, t, d = 0.2) => tl.to(s, { opacity: 0, duration: d, ease: "power2.in" }, t);
+const pop = (s, t, d = 0.3) => tl.fromTo(s, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: d, ease: "back.out(2.2)" }, t);
+const slideUp = (s, t, dy = 110) => tl.fromTo(s, { opacity: 0, y: dy }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" }, t);
+const card = (s, t) => { slideUp(s, t); tl.fromTo(`${s} > .tag, ${s} > .head, ${s} > .sub`, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.25, stagger: 0.08, ease: "power2.out" }, t + 0.05); };
+const push = (s, t0, t1, to = 1.06) => tl.fromTo(s, { scale: 1 }, { scale: to, duration: Math.max(0.1, t1 - t0), ease: "none" }, t0);
+const cut = (a, b, t) => { hide(a, t); show(b, t); };
+const whip = (a, b, t) => {
+  tl.to(a, { x: -340, filter: "blur(28px)", duration: 0.1, ease: "power2.in" }, t - 0.1);
+  hide(a, t); show(b, t);
+  tl.fromTo(b, { x: 340, filter: "blur(28px)" }, { x: 0, filter: "blur(0px)", duration: 0.1, ease: "power2.out" }, t);
+};
+const person = (c) => `<svg viewBox="0 0 40 48" width="100%" height="100%"><circle cx="20" cy="11" r="9" fill="${c}"/><path d="M4 46c0-14 7-22 16-22s16 8 16 22z" fill="${c}"/></svg>`;
+
+// ---------- background drift ----------
+tl.fromTo("#dots", { x: 0, y: 0 }, { x: 52, y: 78, duration: T.END, ease: "none" }, 0);
+tl.fromTo("#blob1", { x: 0, y: 0 }, { x: 160, y: 120, duration: T.END, ease: "sine.inOut" }, 0);
+tl.fromTo("#blob2", { x: 0, y: 0 }, { x: -180, y: -160, duration: T.END, ease: "sine.inOut" }, 0);
+tl.fromTo("#blob3", { x: 0, y: 0 }, { x: -110, y: 180, duration: T.END, ease: "sine.inOut" }, 0);
+
+// =================== RAT RIG (from brand/mascot/rat_mascot.py) ===================
+const PK = "#F2A3BC", BL = "#0077B6", MT = "#3CE8B4";
+function armSVG(s) {
+  const x = s === "L" ? 178 : 322, L = 55;
+  return `<g class="arm${s}"><ellipse cx="${x}" cy="${335 + L / 2}" rx="24" ry="${L / 2 + 14}" fill="url(#fur)"/>
+   <g class="ptr" opacity="0"><line x1="${x}" y1="${335 + L}" x2="${x}" y2="${335 + L + 190}" stroke="#1A1A1A" stroke-width="8" stroke-linecap="round"/><circle cx="${x}" cy="${335 + L + 192}" r="11" fill="${BL}"/></g>
+   <ellipse cx="${x}" cy="${335 + L + 6}" rx="17" ry="14" fill="${PK}"/>
+   <path d="M${x - 8} ${335 + L + 14} v6 M${x} ${335 + L + 16} v6 M${x + 8} ${335 + L + 14} v6" stroke="#D97C9A" stroke-width="3" stroke-linecap="round"/></g>`;
+}
+let eyes = "";
+for (const x of [203, 297]) eyes += `<ellipse cx="${x}" cy="232" rx="24" ry="28" fill="url(#eye)"/><circle cx="${x - 9}" cy="220" r="9" fill="#fff"/><circle cx="${x + 9}" cy="244" r="4" fill="#fff" opacity=".9"/>`;
+const teeth = '<rect x="239" y="297" width="10" height="13" rx="3" fill="#fff"/><rect x="251" y="297" width="10" height="13" rx="3" fill="#fff"/>';
+let wh = "";
+for (const s of [-1, 1]) for (const d of [-6, 4, 14]) wh += `<line x1="${250 + s * 40}" y1="${275 + d}" x2="${250 + s * 170}" y2="${250 + d * 3}" stroke="#fff" stroke-width="2" opacity=".75"/>`;
+$("#rat").innerHTML = `<defs>
+<radialGradient id="fur" cx=".38" cy=".3" r=".8"><stop offset="0" stop-color="#A874EC"/><stop offset=".6" stop-color="#8447CF"/><stop offset="1" stop-color="#5E2A9E"/></radialGradient>
+<radialGradient id="ear" cx=".5" cy=".45" r=".6"><stop offset="0" stop-color="#FFD0DC"/><stop offset="1" stop-color="#EE8FAE"/></radialGradient>
+<radialGradient id="eye" cx=".5" cy=".6" r=".6"><stop offset="0" stop-color="#7B3F8F"/><stop offset=".55" stop-color="#3A1650"/><stop offset="1" stop-color="#1A0826"/></radialGradient></defs>
+<g id="rbody">
+ <g id="rtail"><path d="M340 500 Q450 520 440 440 Q432 380 470 360" stroke="${PK}" stroke-width="13" fill="none" stroke-linecap="round"/><path d="M340 500 Q450 520 440 440 Q432 380 470 360" stroke="#D97C9A" stroke-width="13" fill="none" stroke-linecap="round" stroke-dasharray="2 14" opacity=".6"/></g>
+ <ellipse cx="195" cy="505" rx="38" ry="16" fill="${PK}"/><ellipse cx="305" cy="505" rx="38" ry="16" fill="${PK}"/>
+ <g id="rtorso"><ellipse cx="250" cy="395" rx="128" ry="120" fill="url(#fur)"/><ellipse cx="250" cy="410" rx="78" ry="82" fill="#C9A6F2" opacity=".45"/></g>
+ <g id="rhead">
+  <circle cx="148" cy="128" r="66" fill="url(#fur)"/><circle cx="148" cy="132" r="50" fill="url(#ear)"/>
+  <circle cx="352" cy="128" r="66" fill="url(#fur)"/><circle cx="352" cy="132" r="50" fill="url(#ear)"/>
+  <ellipse cx="250" cy="240" rx="118" ry="102" fill="url(#fur)"/>
+  <ellipse cx="250" cy="288" rx="52" ry="36" fill="#B58BEE" opacity=".6"/>
+  <ellipse id="blushL" cx="172" cy="282" rx="22" ry="13" fill="#FF8FB1" opacity=".45"/><ellipse id="blushR" cx="328" cy="282" rx="22" ry="13" fill="#FF8FB1" opacity=".45"/>
+  <g id="rbrows"><path d="M180 192 Q203 182 224 190" stroke="#4A1D78" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M276 190 Q297 182 320 192" stroke="#4A1D78" stroke-width="5" fill="none" stroke-linecap="round"/></g>
+  <g id="reyes">${eyes}</g>
+  <path d="M238 268 Q250 262 262 268 Q258 282 250 284 Q242 282 238 268Z" fill="#F07A9B"/>
+  <g id="m-smile">${teeth}<path d="M226 292 Q238 302 250 293 Q262 302 274 292" stroke="#3A1650" stroke-width="4" fill="none" stroke-linecap="round"/></g>
+  <g id="m-open" opacity="0"><path d="M228 292 Q250 330 272 292 Z" fill="#3A1650"/><ellipse cx="250" cy="312" rx="11" ry="6" fill="#F07A9B"/>${teeth}</g>
+  <g id="m-o" opacity="0"><ellipse cx="250" cy="306" rx="12" ry="15" fill="#3A1650"/></g>
+  <g id="m-hmm" opacity="0"><path d="M232 298 Q250 292 268 300" stroke="#3A1650" stroke-width="4" fill="none" stroke-linecap="round"/></g>
+  ${wh}
+  <g id="glasses" opacity="0"><circle cx="203" cy="232" r="42" fill="rgba(255,255,255,.12)" stroke="#1A1A1A" stroke-width="6"/><circle cx="297" cy="232" r="42" fill="rgba(255,255,255,.12)" stroke="#1A1A1A" stroke-width="6"/><path d="M245 230 Q250 222 255 230" stroke="#1A1A1A" stroke-width="6" fill="none"/></g>
+ </g>
+ ${armSVG("L")}${armSVG("R")}
+ <text id="rq" x="385" y="95" font-family="BVP" font-weight="800" font-size="90" fill="${BL}" opacity="0">?</text>
+ <g id="rsp" stroke="${BL}" stroke-width="7" stroke-linecap="round" opacity="0"><line x1="120" y1="45" x2="105" y2="15"/><line x1="250" y1="20" x2="250" y2="-10"/><line x1="380" y1="45" x2="395" y2="15"/></g>
+ <g id="rwv" stroke="${MT}" stroke-width="6" stroke-linecap="round" fill="none" opacity="0"><path d="M415 175 q14 -14 0 -28"/><path d="M435 185 q24 -26 0 -52"/></g>
+ <g id="rst" fill="${MT}" opacity="0"><path d="M150 380 l6 14 14 6 -14 6 -6 14 -6 -14 -14 -6 14 -6z"/><path d="M350 380 l6 14 14 6 -14 6 -6 14 -6 -14 -14 -6 14 -6z"/></g>
+</g>`;
+const PIV = { L: "178 335", R: "322 335" };
+const arm = (s, a, t, d = 0.3) => tl.to(`#rat .arm${s}`, { rotation: a, svgOrigin: PIV[s], duration: d, ease: "back.out(1.7)" }, t);
+const arms = (la, ra, t, d) => { arm("L", la, t, d); arm("R", ra, t, d); };
+const IDLE = (t) => arms(35, -35, t);
+const MOUTHS = ["#m-smile", "#m-open", "#m-o", "#m-hmm"];
+const EXPR = [];  // [t0,t1] windows where lip-flap is off
+const mouth = (m, t) => MOUTHS.forEach((id) => tl.set(id, { opacity: id === "#m-" + m ? 1 : 0 }, t));
+const flash = (s, t, hold = 1.2) => { tl.fromTo(s, { opacity: 0, scale: 0.5, svgOrigin: "250 250" }, { opacity: 1, scale: 1, svgOrigin: "250 250", duration: 0.25, ease: "back.out(2)" }, t); tl.to(s, { opacity: 0, duration: 0.2 }, t + hold); };
+const expr = (m, t0, t1) => { EXPR.push([t0, t1]); mouth(m, t0); mouth("smile", t1); };
+// place: move the rat wrapper (x,y relative to default lower-right slot) and scale
+const place = (x, y, s, t, d = 0.4) => tl.to("#ratwrap", { x, y, scale: s, duration: d, ease: "back.out(1.4)", transformOrigin: "50% 100%" }, t);
+const A = {
+  enter: (t) => tl.fromTo("#ratwrap", { opacity: 0, y: 700 }, { opacity: 1, y: 0, duration: 0.4, ease: "back.out(1.6)" }, t),
+  exit: (t) => tl.to("#ratwrap", { opacity: 0, y: 700, duration: 0.35, ease: "back.in(1.4)" }, t),
+  wave: (t, n = 3) => { arm("R", -160, t); for (let k = 0; k < n; k++) { arm("R", -135, t + 0.3 + k * 0.3, 0.15); arm("R", -165, t + 0.45 + k * 0.3, 0.15); } flash("#rwv", t + 0.2, 0.3 * n); expr("open", t, t + 0.3 + n * 0.3); IDLE(t + 0.4 + n * 0.3); },
+  point: (t, side = "L", dur = 1.4, ang) => { arm(side, ang ?? (side === "L" ? 100 : -100), t); tl.to("#reyes", { x: side === "L" ? -6 : 6, duration: 0.2 }, t); tl.to("#reyes", { x: 0, duration: 0.2 }, t + dur); IDLE(t + dur); },
+  teach: (t, side = "L", ang = 105, taps = 2) => {
+    tl.set(`#rat .arm${side} .ptr`, { opacity: 1 }, t); arm(side, ang, t);
+    for (let k = 0; k < taps; k++) { arm(side, ang + 10, t + 0.35 + k * 0.35, 0.15); arm(side, ang, t + 0.5 + k * 0.35, 0.15); }
+    const e = t + 0.6 + taps * 0.35; tl.set(`#rat .arm${side} .ptr`, { opacity: 0 }, e + 0.3); IDLE(e + 0.3);
+  },
+  scratch: (t, dur = 2) => { arm("L", 168, t); for (let k = 0; k < 4; k++) { arm("L", 158, t + 0.35 + k * 0.3, 0.15); arm("L", 170, t + 0.5 + k * 0.3, 0.15); } expr("hmm", t, t + dur); tl.to("#rbrows", { y: -6, duration: 0.2 }, t); tl.to("#rbrows", { y: 0, duration: 0.2 }, t + dur); IDLE(t + dur); },
+  glasses: (on, t) => tl.fromTo("#glasses", { opacity: on ? 0 : 1, y: on ? -120 : 0 }, { opacity: on ? 1 : 0, y: on ? 0 : -120, duration: 0.35, ease: "back.out(1.6)" }, t),
+  think: (t, dur = 2.5) => { arm("L", 150, t); expr("hmm", t, t + dur); flash("#rq", t + 0.2, dur - 0.4); tl.to("#reyes", { x: 5, y: -6, duration: 0.25 }, t); tl.to("#reyes", { x: 0, y: 0, duration: 0.25 }, t + dur); IDLE(t + dur); },
+  surprised: (t, dur = 1.4) => { arms(155, -155, t); expr("o", t, t + dur); flash("#rsp", t, dur); tl.to("#reyes", { scale: 1.15, svgOrigin: "250 232", duration: 0.2 }, t); tl.to("#reyes", { scale: 1, svgOrigin: "250 232", duration: 0.2 }, t + dur); IDLE(t + dur); },
+  happy: (t, dur = 1.2) => { arms(55, -55, t); expr("open", t, t + dur); flash("#rst", t, dur); IDLE(t + dur); },
+  nod: (t, n = 2) => { for (let k = 0; k < n; k++) { tl.to("#rhead", { y: 12, duration: 0.14, ease: "sine.inOut" }, t + k * 0.3); tl.to("#rhead", { y: 0, duration: 0.14, ease: "sine.inOut" }, t + 0.15 + k * 0.3); } },
+  shake: (t, n = 5) => { for (let k = 0; k < n; k++) tl.to("#rhead", { rotation: k % 2 ? 9 : -9, svgOrigin: "250 330", duration: 0.07, ease: "sine.inOut" }, t + k * 0.07); tl.to("#rhead", { rotation: 0, svgOrigin: "250 330", duration: 0.1 }, t + n * 0.07); },
+};
+// idle over the whole video: breathing bob, tail sway, blinks every ~3.5s
+tl.fromTo("#rbody", { y: 0 }, { y: 7, duration: 0.9, ease: "sine.inOut", yoyo: true, repeat: Math.ceil(T.END / 0.9) }, 0);
+tl.fromTo("#rtail", { rotation: -4, svgOrigin: "340 500" }, { rotation: 5, svgOrigin: "340 500", duration: 1.3, ease: "sine.inOut", yoyo: true, repeat: Math.ceil(T.END / 1.3) }, 0);
+for (let b = 1.7; b < T.END; b += 3.4 + (Math.floor(b) % 3) * 0.2) {
+  tl.to("#reyes", { scaleY: 0.1, svgOrigin: "250 232", duration: 0.07 }, b);
+  tl.to("#reyes", { scaleY: 1, svgOrigin: "250 232", duration: 0.08 }, b + 0.08);
+}
+IDLE(0);
+
+// ---------- S1 ----------
+show("#s1", 0);
+card("#s1card", 0);
+tl.fromTo("#logo1", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, 0.2);
+tl.fromTo("#thumb", { opacity: 0, x: -200, y: -120, rotation: -4 }, { opacity: 1, x: 0, y: 0, rotation: -4, duration: 0.35, ease: "power3.out" }, T.S1_prev + 0.15);
+tl.to("#thumb", { opacity: 0, duration: 0.3 }, T.S1_prev + 1.7);
+tl.set("#ratwrap", { x: -295, opacity: 0 }, 0);
+A.enter(T.S1_rat);
+A.wave(T.S1_rat + 0.4);
+
+// ---------- S2 ----------
+cut("#s1", "#s2", T.S2);
+place(0, 0, 1, T.S2);
+push("#mallbg", T.S2, T.S3);
+card("#s2card", T.S2 + 0.05);
+pop("#cnt", T.S2_5 - 0.15); fadeIn("#cntlab", T.S2_5);
+const cnt = { v: 1 };
+tl.fromTo(cnt, { v: 1 }, { v: 5, duration: 0.6, ease: "none", onUpdate: () => { $("#cntn").textContent = Math.round(cnt.v); } }, T.S2_5);
+A.scratch(T.S2 + 0.4, 2.2);
+flash("#rq", T.S2_q, 0.9);
+
+// ---------- S3 ----------
+whip("#s2", "#s3", T.S3);
+place(40, 60, 0.88, T.S3);
+push("#pencilph .img", T.S3, T.S4);
+card("#s3card", T.S3 + 0.2);
+fadeIn("#drawbox", T.S3_tranh - 0.1, 0.2);
+document.querySelectorAll("#drawing .st").forEach((p) => { const L = p.getTotalLength ? p.getTotalLength() : 800; p.setAttribute("stroke-dasharray", L); p.setAttribute("stroke-dashoffset", L); });
+tl.to("#drawing .st", { strokeDashoffset: 0, duration: 0.35, stagger: 0.28, ease: "power1.inOut" }, T.S3_tranh);
+fadeIn("#tomauimg", T.S3_to, 0.4);
+tl.fromTo("#hand2", { opacity: 0, x: 400 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, T.S3_do - 0.3);
+tl.to("#roofred", { opacity: 0.9, duration: 0.4 }, T.S3_do + 0.1);
+pop("#nguoikhac", T.S3_do + 0.2);
+tl.to("#hand2", { opacity: 0, x: 400, duration: 0.3 }, T.S3_do + 1.6);
+fadeOut("#nguoikhac", T.S3_quen + 0.3, 0.5);
+A.teach(T.S3_do - 0.2, "L", 100, 3);
+
+// ---------- S4 ----------
+whip("#s3", "#s4", T.S4);
+place(-610, 60, 0.92, T.S4);
+pop("#year", T.S4);
+tl.fromTo("#paper", { opacity: 0, y: 120, rotation: -3 }, { opacity: 1, y: 0, rotation: -3, duration: 0.35, ease: "power3.out" }, T.S4 + 0.2);
+tl.fromTo("#paper img", { scale: 1 }, { scale: 1.06, duration: T.S5 - T.S4, ease: "none" }, T.S4 + 0.2);
+tl.fromTo("#mk", { scaleX: 0 }, { immediateRender: true, scaleX: 1, duration: 0.3, ease: "power2.out" }, T.S4 + 0.7);
+pop("#lofph", T.S4_lof - 0.1);
+push("#lofimg", T.S4_lof, T.S5);
+card("#lofcard", T.S4_lof + 0.1);
+tl.fromTo("#pick", { opacity: 0, x: 300 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out" }, T.S4_pick);
+A.glasses(true, T.S4_nha);
+A.point(T.S4_lof + 0.3, "R", 2.2, -125);
+
+// ---------- S5 ----------
+cut("#s4", "#s5", T.S5);
+place(0, 0, 1, T.S5);
+const g5 = $("#grid5"), g7 = $("#grid7");
+for (let i = 0; i < 24; i++) {
+  for (const [g, id] of [[g5, "p5_"], [g7, "p7_"]]) {
+    const d = document.createElement("div");
+    d.className = "person"; d.id = id + i; d.style.left = (i % 8) * 145 + 10 + "px"; d.style.top = Math.floor(i / 8) * 140 + "px"; d.style.opacity = 0;
+    d.innerHTML = `<div class="grey" style="position:absolute;inset:0">${person("#9AA3AE")}</div><div class="blue" style="position:absolute;inset:0;opacity:0">${person("#0077B6")}</div>`;
+    g.appendChild(d);
+  }
+}
+tl.fromTo("#grid5 .person", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.2, stagger: 0.03, ease: "back.out(2)" }, T.S5_24 - 0.1);
+pop("#c24", T.S5_24);
+const c24 = { v: 0 };
+tl.fromTo(c24, { v: 0 }, { v: 24, duration: 0.72, ease: "none", onUpdate: () => { $("#c24n").textContent = Math.round(c24.v); } }, T.S5_24);
+const POL = [["20% 50%", -8, 100, 700], ["50% 50%", 3, 250, 740], ["80% 50%", -2, 400, 780]];
+POL.forEach(([bp, r, x, y], i) => {
+  const d = document.createElement("div");
+  d.className = "pol"; d.id = "pol" + i; d.style.left = x + "px"; d.style.top = y + "px"; d.style.opacity = 0;
+  d.innerHTML = `<div class="img" style="background-image:url(assets/vintage.jpg);background-position:${bp};background-size:320% auto"></div><div class="lab">✔ THẬT</div>`;
+  $("#pols").appendChild(d);
+  tl.fromTo(d, { opacity: 0, y: 200, rotation: r }, { opacity: 1, y: 0, rotation: r, duration: 0.3, ease: "back.out(1.6)" }, T.S5_3 + i * 0.15);
+});
+const p4 = document.createElement("div");
+p4.className = "pol"; p4.id = "pol3"; p4.style.cssText = "left:560px;top:820px;opacity:0;border:8px solid #0077B6";
+p4.innerHTML = `<div class="img" id="p4q" style="background:#EAF4FB;display:flex;align-items:center;justify-content:center;font-size:220px;font-weight:800;color:#0077B6">?</div>
+ <div class="img hid" id="p4mall" style="position:absolute;inset:22px 22px 90px;width:auto;height:auto;background-image:url(assets/mall.jpg)"></div>
+ <div class="img hid" id="p4cry" style="position:absolute;inset:22px 22px 90px;width:auto;height:auto;background-image:url(assets/child_cry.jpg)"></div>
+ <div class="lab" style="color:#0077B6">BỊA?</div>`;
+$("#pols").appendChild(p4);
+tl.fromTo(p4, { opacity: 0, x: 500, rotation: 6 }, { opacity: 1, x: 0, rotation: 6, duration: 0.35, ease: "power3.out" }, T.S5_bia);
+[0, 1, 2, 3].forEach((i) => {
+  const dx = [180, -120, 120, -260][i];
+  tl.to("#pol" + i, { x: dx, duration: 0.2, ease: "power2.inOut" }, T.S5_bia + 0.5);
+  tl.to("#pol" + i, { x: 0, duration: 0.2, ease: "power2.inOut" }, T.S5_bia + 0.72);
+});
+// the invented story: 4th card flips, grows, shows mall then crying child
+tl.to("#pol3", { scaleX: 0, duration: 0.12, ease: "power1.in" }, T.S5_ttm - 0.1);
+tl.set("#p4mall", { opacity: 1 }, T.S5_ttm + 0.02);
+tl.to("#pol3", { scaleX: 1, duration: 0.12, ease: "power1.out" }, T.S5_ttm + 0.02);
+tl.to("#pol3", { x: -420, y: -120, scale: 1.25, rotation: 0, duration: 0.35, ease: "power3.inOut" }, T.S5_ttm + 0.15);
+tl.to(["#pol0", "#pol1", "#pol2"], { opacity: 0.25, duration: 0.3 }, T.S5_ttm + 0.15);
+fadeIn("#p4cry", T.S5_khoc, 0.35);
+fadeIn("#walk", T.S5_ba - 0.1, 0.2);
+$("#walk").innerHTML = `<svg id="gma" width="620" height="380" viewBox="0 0 620 380"><g fill="none" stroke="#1A1A1A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+ <g id="gmaFig"><circle cx="150" cy="80" r="42" fill="#fff"/><path d="M118 62q32-40 64 0" stroke="#9AA3AE" stroke-width="16"/><path d="M110 130h80l20 150h-120z" fill="#3CE8B4"/><path d="M130 280l-10 70M170 280l10 70"/><path d="M190 150l50 70"/><path d="M110 150l-30 90"/><path d="M78 240v110" stroke="#8B5E3C" stroke-width="8"/></g>
+ <g id="kidFig"><circle cx="290" cy="170" r="30" fill="#fff"/><path d="M262 205h56l10 90h-76z" fill="#0077B6"/><path d="M272 295l-6 55M308 295l6 55"/><path d="M262 220l-22 0"/><path d="M280 172v6M300 172v6"/><path d="M276 192q14-8 28 0"/></g></g></svg>`;
+tl.fromTo("#gma", { x: -120 }, { x: 60, duration: T.S6 - T.S5_ba + 0.2, ease: "none" }, T.S5_ba - 0.1);
+A.point(T.S5_len, "L", 1.2, 110);
+A.nod(T.S5_len + 1.3, 2);
+
+// ---------- S6 ----------
+cut("#s5", "#s6", T.S6);
+pop("#intph", T.S6);
+push("#intimg", T.S6, T.S7);
+let sess = "";
+for (let i = 1; i <= 3; i++) sess += `<div class="sessd" id="ss${i}" style="flex:none;width:150px;height:170px;border-radius:24px;background:#fff;border:5px solid #9AA3AE;overflow:hidden;text-align:center"><div style="height:44px;background:#9AA3AE" class="sstop"></div><div style="font-size:26px;font-weight:800;margin-top:8px">Buổi</div><div style="font-size:66px;font-weight:800;line-height:1">${i}</div></div>${i < 3 ? '<div style="font-size:60px;font-weight:800;color:#0077B6">→</div>' : ""}`;
+$("#sess").innerHTML = sess;
+fadeIn("#sess", T.S6 + 0.3);
+[1, 2, 3].forEach((i) => {
+  const t = T.S6_hoi + (i - 1) * 0.55;
+  tl.fromTo("#qb" + i, { opacity: 0, scale: 0.7, x: 60 }, { opacity: 1, scale: 1, x: 0, duration: 0.3, ease: "back.out(1.8)" }, t);
+  tl.to(`#ss${i}`, { borderColor: "#0077B6", duration: 0.2 }, t);
+  tl.to(`#ss${i} .sstop`, { backgroundColor: "#3CE8B4", duration: 0.2 }, t);
+});
+A.think(T.S6 + 0.4, 3);
+
+// ---------- S7 ----------
+cut("#s6", "#s7", T.S7);
+tl.set("#grid7 .person", { opacity: 1 }, T.S7);
+tl.fromTo("#grid7", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.3 }, T.S7);
+const HI = [2, 5, 9, 14, 19, 22];
+HI.forEach((i, k) => {
+  tl.to(`#p7_${i} .blue`, { opacity: 1, duration: 0.15 }, T.S7_cu + 0.2 + k * 0.18);
+  tl.fromTo(`#p7_${i}`, { scale: 1 }, { scale: 1.25, duration: 0.15, yoyo: true, repeat: 1 }, T.S7_cu + 0.2 + k * 0.18);
+});
+card("#stat", T.S7_mot);
+A.surprised(T.S7_mot, 1.6);
+$("#kb1").innerHTML = `<svg width="100%" height="100%" viewBox="0 0 120 90"><path d="M60 70V40" stroke="#1A1A1A" stroke-width="2"/><ellipse cx="60" cy="26" rx="18" ry="22" fill="#E63946" stroke="#1A1A1A" stroke-width="3"/><circle cx="30" cy="70" r="5" fill="#3CE8B4"/><circle cx="92" cy="66" r="4" fill="#0077B6"/></svg>`;
+$("#kb2").innerHTML = `<svg width="100%" height="100%" viewBox="0 0 120 90"><rect x="18" y="16" width="84" height="30" rx="6" fill="#0077B6" stroke="#1A1A1A" stroke-width="3"/><text x="60" y="38" text-anchor="middle" font-family="BVP" font-weight="800" font-size="16" fill="#fff">SHOP</text><path d="M30 46v34M90 46v34M22 80h76" stroke="#1A1A1A" stroke-width="3"/></svg>`;
+tl.fromTo(["#kb1", "#kb2"], { opacity: 0, scale: 0.2, transformOrigin: "50% 0%" }, { opacity: 1, scale: 1, duration: 0.35, stagger: 0.25, ease: "back.out(1.8)" }, T.S7_ke);
+
+// ---------- S8 ----------
+cut("#s7", "#s8", T.S8);
+place(-295, 60, 1.2, T.S8);
+let legs = "";
+[[90, 260], [230, 300], [380, 250], [620, 280], [770, 240], [900, 290]].forEach(([x, h]) => {
+  legs += `<rect x="${x}" y="${640 - h - 40}" width="34" height="${h}" rx="10" fill="#6B7280"/><rect x="${x + 50}" y="${640 - h - 40}" width="34" height="${h}" rx="10" fill="#6B7280"/>
+  <ellipse cx="${x + 12}" cy="${612}" rx="36" ry="16" fill="#1A1A1A"/><ellipse cx="${x + 70}" cy="${612}" rx="36" ry="16" fill="#1A1A1A"/>`;
+});
+legs += `<g transform="translate(520 560)"><ellipse cx="0" cy="18" rx="34" ry="28" fill="#8447CF"/><circle cx="-20" cy="-6" r="13" fill="#8447CF"/><circle cx="20" cy="-6" r="13" fill="#8447CF"/><circle cx="0" cy="4" r="22" fill="#8447CF"/><circle cx="-7" cy="2" r="4" fill="#1A1A1A"/><circle cx="7" cy="2" r="4" fill="#1A1A1A"/><path d="M-8 14q8 -5 16 0" stroke="#3A1650" stroke-width="3" fill="none"/><text x="30" y="-30" font-family="BVP" font-weight="800" font-size="46" fill="#0077B6">?!</text></g>`;
+$("#legs").innerHTML = legs;
+pop("#thought8", T.S8 + 0.2, 0.35);
+A.think(T.S8 + 0.1, T.S8_lac - T.S8 + 0.2);
+A.shake(T.S8_lac + 0.3, 6);
+tl.to("#thought8", { scale: 1.12, opacity: 0, duration: 0.18, ease: "power2.in" }, T.S8_lac + 0.35);
+expr("smile", T.S8_lac + 0.8, T.S9);
+tl.to(["#blushL", "#blushR"], { opacity: 0.9, duration: 0.2 }, T.S8_lac + 0.75);
+tl.to(["#blushL", "#blushR"], { opacity: 0.45, duration: 0.3 }, T.S9 + 0.5);
+arm("R", -150, T.S8_lac + 0.75);
+
+// ---------- S9 ----------
+whip("#s8", "#s9", T.S9);
+place(0, 0, 1, T.S9);
+["#r1", "#r2", "#r3"].forEach((r, i) => {
+  const t = [T.S9_r1, T.S9_r2, T.S9_r3][i] - 0.2;
+  tl.fromTo(r, { opacity: 0, x: -200 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out" }, t);
+  A.teach(t + 0.1, "L", [140, 125, 110][i], 1);
+});
+fadeOut(["#r1", "#r2", "#r3"], T.S9_pb - 0.1, 0.25);
+fadeIn("#brainbg", T.S9_pb, 0.4); fadeIn("#brainveil", T.S9_pb, 0.4);
+push("#brainbg", T.S9_pb, T.S10, 1.08);
+tl.fromTo("#bA", { opacity: 0, x: -150 }, { opacity: 1, x: 0, duration: 0.3 }, T.S9_pb + 0.2);
+tl.fromTo("#bB", { opacity: 0, x: 150 }, { opacity: 1, x: 0, duration: 0.3 }, T.S9_pb + 0.35);
+tl.to("#bA", { x: 280, duration: 1.8, ease: "power1.inOut" }, T.S9_pb + 0.8);
+tl.to("#bB", { x: -280, duration: 1.8, ease: "power1.inOut" }, T.S9_pb + 0.8);
+tl.to(["#bA", "#bB"], { opacity: 0, duration: 0.2 }, T.S9_pb + 2.5);
+pop("#bM", T.S9_pb + 2.5, 0.35);
+tl.to("#bM", { opacity: 0, y: 380, duration: 0.3 }, T.S9_term - 0.1);
+card("#term", T.S9_term);
+A.glasses(false, T.S9_term + 0.2);
+
+// ---------- S10 ----------
+cut("#s9", "#s10", T.S10);
+place(20, 130, 0.9, T.S10);
+tl.fromTo("#avatar", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.4)" }, T.S10);
+card("#s10card", Math.min(T.S10_tap, T.S10 + 0.4));
+pop("#follow", T.S10 + 0.05);
+tl.to("#follow", { scale: 1.15, duration: 0.18, yoyo: true, repeat: 1, ease: "sine.inOut" }, T.S10 + 0.4);
+A.wave(T.S10 + 0.3, 3);
+A.exit(T.END - 1.2);
+
+// ---------- lip flap on every word while the rat is visible ----------
+T.WORDS.forEach((t) => {
+  if (t < T.S1_rat + 0.3 || t > T.END - 1.2) return;
+  if (EXPR.some(([a, b]) => t >= a - 0.1 && t <= b + 0.1)) return;
+  tl.set("#m-open", { opacity: 1 }, t); tl.set("#m-smile", { opacity: 0 }, t);
+  tl.set("#m-open", { opacity: 0 }, t + 0.11); tl.set("#m-smile", { opacity: 1 }, t + 0.11);
+});
+
+// ---------- captions ----------
+const KEY = /^(source|confusion|lạc|1995|24|loftus|pickrell)$/i;
+CAPS.forEach((c, i) => {
+  const d = document.createElement("div");
+  d.className = "cap"; d.id = "cap" + i;
+  d.innerHTML = `<div class="in">${c.w.map(([w], j) => `<span class="${KEY.test(w.replace(/[,.?!]/g, "")) ? "k" : ""}" id="cw${i}_${j}">${w}</span>`).join(" ")}</div>`;
+  $("#caps").appendChild(d);
+  tl.set(d, { visibility: "visible" }, c.s);
+  tl.set(d, { visibility: "hidden" }, c.e);
+  c.w.forEach(([, t], j) => tl.set(`#cw${i}_${j}`, { opacity: 1 }, t));
+});
+tl.set({}, {}, T.END);
+window.__timelines["ep02"] = tl;
+</script>
+</body>
+</html>
