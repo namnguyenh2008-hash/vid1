@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/setup.sh\" > /tmp/setup.log 2>&1 || true", "timeout": 600 }
+        ]
+      }
+    ]
+  }
+}

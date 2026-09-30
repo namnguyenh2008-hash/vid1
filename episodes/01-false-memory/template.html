@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="vendor/gsap.min.js"></script>
+<style>
+@font-face{font-family:"BVP";font-weight:600;src:url("fonts/bvp-vietnamese-600.woff2") format("woff2");unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+@font-face{font-family:"BVP";font-weight:600;src:url("fonts/bvp-latin-600.woff2") format("woff2")}
+@font-face{font-family:"BVP";font-weight:800;src:url("fonts/bvp-vietnamese-800.woff2") format("woff2");unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+@font-face{font-family:"BVP";font-weight:800;src:url("fonts/bvp-latin-800.woff2") format("woff2")}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#fff}
+#root{position:relative;width:100%;height:100%;font-family:"BVP",sans-serif;color:#1A1A1A;overflow:hidden;background:#fff}
+#stage{position:absolute;inset:0;z-index:1}
+.scene{position:absolute;inset:0;visibility:hidden;background:#fff;overflow:hidden}
+.abs{position:absolute}
+.hid{opacity:0}
+.full{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* card */
+.card{position:absolute;left:60px;width:870px;padding:34px 44px 40px;border-radius:32px;background:rgba(255,255,255,.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 12px 40px rgba(0,0,0,.12);text-align:center}
+.tag{display:block;font-size:28px;font-weight:800;letter-spacing:.14em;color:#0077B6;margin-bottom:10px}
+.head{display:block;font-size:88px;font-weight:800;line-height:1.12;letter-spacing:-.01em}
+.pill{display:inline-block;background:#0077B6;color:#fff;border-radius:999px;padding:0 .32em;line-height:1.15}
+.sub{display:flex;align-items:center;justify-content:center;gap:14px;font-size:36px;font-weight:600;margin-top:16px;color:#1A1A1A}
+.chip{position:absolute;display:inline-block;padding:10px 26px;border-radius:999px;background:#fff;border:3px solid #0077B6;color:#0077B6;font-weight:800;font-size:34px;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.08)}
+.bluepill{position:absolute;padding:10px 34px;border-radius:999px;background:#0077B6;color:#fff;font-weight:800;font-size:40px;white-space:nowrap}
+.paper{position:absolute;background:#fff;padding:18px;border-radius:10px;box-shadow:0 18px 50px rgba(0,0,0,.18)}
+.paper img{display:block;width:100%}
+.marker{position:absolute;background:#0077B6;opacity:.28;border-radius:6px;transform-origin:left center}
+/* S2 list */
+.lw{position:absolute;width:420px;height:80px;margin-left:-210px;margin-top:-40px;line-height:80px;text-align:center;font-size:56px;font-weight:800;opacity:0}
+#bar{position:absolute;left:60px;top:160px;width:870px;height:10px;border-radius:5px;background:#E6EEF4;overflow:hidden}
+#barfill{width:100%;height:100%;background:#0077B6;transform-origin:left center}
+.opt{position:absolute;top:1090px;width:200px;height:96px;margin-left:-100px;border-radius:999px;border:4px solid #1A1A1A;background:#fff;font-size:44px;font-weight:800;line-height:88px;text-align:center}
+/* network */
+.node{position:absolute;width:240px;height:70px;margin-left:-120px;margin-top:-35px;border-radius:999px;background:#EEF1F4;color:#6B7280;font-size:32px;font-weight:800;line-height:70px;text-align:center}
+.node .on{position:absolute;inset:0;border-radius:999px;background:#0077B6;color:#fff;opacity:0}
+.dot{position:absolute;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:#0077B6;box-shadow:0 0 16px #0077B6;opacity:0}
+.bubble{position:absolute;background:#fff;border:4px solid #1A1A1A;border-radius:40px;font-weight:600;text-align:center}
+.colhead{position:absolute;top:170px;width:300px;margin-left:-150px;text-align:center;font-size:40px;font-weight:800;letter-spacing:.08em;color:#0077B6}
+.frame{position:absolute;border-radius:24px;background:#F3F7FA;border:4px solid #1A1A1A;overflow:hidden}
+.page{position:absolute;inset:0;border-radius:24px;background:#fff;border:4px solid #1A1A1A;transform-origin:50% 0;display:flex;align-items:center;justify-content:center;font-size:120px;font-weight:800}
+.page .top{position:absolute;left:0;right:0;top:0;height:64px;background:#0077B6;border-radius:18px 18px 0 0}
+.barc{position:absolute;bottom:760px;width:200px;border-radius:20px 20px 0 0;background:#0077B6;transform-origin:50% 100%}
+.blab{position:absolute;top:1176px;width:260px;margin-left:-130px;text-align:center;font-size:34px;font-weight:800}
+/* captions */
+#caps{position:absolute;inset:0;z-index:20;pointer-events:none}
+.cap{position:absolute;left:60px;width:870px;bottom:480px;display:flex;justify-content:center;visibility:hidden}
+.cap .in{max-width:870px;padding:12px 30px 16px;border-radius:26px;background:rgba(0,0,0,.55);color:#fff;font-size:50px;font-weight:600;line-height:1.28;text-align:center}
+.cap span{opacity:.45}
+.cap span.k{color:#4FB3E8}
+#vwrap{position:absolute;inset:0;z-index:2}
+#vwrap video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#s11ov{position:absolute;inset:0;z-index:3}
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="ep01" data-start="0" data-duration="__DUR__" data-width="1080" data-height="1920">
+<audio id="vo" src="assets/vo.wav" data-start="0" data-duration="__VODUR__" data-track-index="9" data-volume="1"></audio>
+
+<div id="stage" class="clip" data-start="0" data-duration="__DUR__" data-track-index="0">
+
+ <!-- S1 -->
+ <div class="scene" id="s1">
+  <div class="full" id="s1img" style="background:url(assets/bed.jpg) 42% 50%/cover"></div>
+  <div class="full" style="background:rgba(255,255,255,.2)"></div>
+  <div class="card hid" id="s1card" style="top:1000px"><span class="tag">TEST TRÍ NHỚ</span><span class="head"><span class="pill">10</span> từ</span></div>
+  <svg class="abs hid" id="ear" style="left:800px;top:900px" width="120" height="120" viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#0077B6"/><path d="M24 26a9 9 0 1 1 15 7c-3 2-4 4-4 7a5 5 0 0 1-9 2" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="M29 27a4 4 0 0 1 7 1" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/></svg>
+ </div>
+
+ <!-- S2 to S4: word list -->
+ <div class="scene" id="slist">
+  <div class="full" style="background:url(assets/bed.jpg) 42% 50%/cover;opacity:.08;filter:blur(14px)"></div>
+  <div id="bar"><div id="barfill"></div></div>
+  <div id="list" class="abs" style="inset:0"></div>
+  <div class="abs" id="scan" style="left:80px;top:250px;width:830px;height:6px;border-radius:3px;background:#0077B6;box-shadow:0 0 24px #0077B6;opacity:0"></div>
+  <div class="abs hid" id="ngu" style="left:0;width:990px;top:800px;text-align:center;font-size:160px;font-weight:800;color:#0077B6">ngủ?</div>
+  <div class="opt hid" id="optY" style="left:320px">CÓ</div>
+  <div class="opt hid" id="optN" style="left:670px">KHÔNG</div>
+  <div id="confetti" class="abs" style="left:320px;top:1138px"></div>
+  <svg class="abs hid" id="cursor" style="left:0;top:0" width="80" height="96" viewBox="0 0 40 48"><path d="M14 4v24l-5-5-4 4 11 14h16l3-15-12-4V4a3 3 0 0 0-6 0z" fill="#fff" stroke="#1A1A1A" stroke-width="2.5" stroke-linejoin="round"/></svg>
+  <div class="abs hid" id="clapper" style="left:800px;top:930px"></div>
+  <div class="abs hid" id="slot" style="left:345px;top:830px;width:300px;height:96px;border:4px dashed #9AA3AE;border-radius:24px;text-align:center;line-height:88px;font-size:52px;font-weight:800;color:#9AA3AE">ngủ
+   <div id="strike" style="position:absolute;left:-20px;top:42px;width:340px;height:8px;border-radius:4px;background:#0077B6;transform-origin:left center"></div></div>
+  <div class="card hid" id="s4card" style="top:990px"><span class="tag">BẠN VỪA TẠO RA</span><span class="head">ký ức <span class="pill">giả</span></span></div>
+ </div>
+
+ <!-- S5 DRM -->
+ <div class="scene" id="s5">
+  <div class="bluepill hid" id="drmpill" style="left:0;top:170px;left:420px">DRM</div>
+  <div class="abs hid" id="drmframe" style="left:60px;top:270px;width:870px;border-radius:32px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.12)"><img id="drmimg" src="assets/drm.png" style="display:block;width:100%"></div>
+  <div class="chip hid" id="n1" style="left:90px;top:770px">Deese</div>
+  <div class="chip hid" id="n2" style="left:300px;top:770px">Roediger</div>
+  <div class="chip hid" id="n3" style="left:580px;top:770px">McDermott</div>
+  <div class="paper hid" id="p95" style="left:110px;top:560px;width:800px"><img src="assets/paper1995.png"><div class="marker" id="m95" style="left:4%;top:18.5%;width:92%;height:6.5%"></div></div>
+  <div class="chip hid" id="c95" style="left:170px;top:1060px">Roediger &amp; McDermott, 1995</div>
+ </div>
+
+ <!-- S6 network -->
+ <div class="scene" id="s6">
+  <div class="abs hid" id="lydo" style="left:0;width:990px;top:760px;text-align:center;font-size:110px;font-weight:800">Lý do?</div>
+  <svg class="abs" id="net" style="left:0;top:0" width="1080" height="1920"></svg>
+  <div id="nodes" class="abs" style="inset:0"></div>
+  <div class="abs hid" id="core" style="left:415px;top:780px;width:160px;height:160px;border-radius:50%;border:5px dashed #9AA3AE;background:#fff">
+   <div id="corefill" style="position:absolute;inset:-5px;border-radius:50%;background:#0077B6;opacity:0;color:#fff;font-size:52px;font-weight:800;text-align:center;line-height:170px">ngủ</div>
+  </div>
+  <div class="card hid" id="s6card" style="top:170px;padding:26px 30px 30px"><span class="tag">GỌI LÀ</span><span class="head" style="font-size:66px"><span class="pill">spreading activation</span></span></div>
+  <div class="abs hid" id="brain" style="left:620px;top:950px"><svg width="150" height="130" viewBox="0 0 150 130"><path d="M75 18C60 2 30 6 26 28 8 32 4 58 18 70 8 86 20 108 42 106 50 124 72 124 75 110 78 124 100 124 108 106 130 108 142 86 132 70 146 58 142 32 124 28 120 6 90 2 75 18Z" fill="#fff" stroke="#0077B6" stroke-width="7" stroke-linejoin="round"/><path d="M75 18v92M40 48c10 0 16 6 16 16M110 48c-10 0-16 6-16 16M38 84c8-4 18-2 22 6M112 84c-8-4-18-2-22 6" fill="none" stroke="#0077B6" stroke-width="6" stroke-linecap="round"/><circle cx="58" cy="66" r="5" fill="#1A1A1A"/><circle cx="92" cy="66" r="5" fill="#1A1A1A"/></svg></div>
+  <div class="bubble hid" id="brainsay" style="left:560px;top:1110px;padding:14px 30px;font-size:40px">nghe rồi mà!</div>
+ </div>
+
+ <!-- S7 Loftus -->
+ <div class="scene" id="s7">
+  <div class="abs" id="lofwrap" style="left:225px;top:180px;width:540px;height:540px;border-radius:50%;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.15)"><div id="lofimg" class="full" style="background:url(assets/loftus.jpg) 38% 30%/cover"></div></div>
+  <div class="card hid" id="s7card" style="top:780px"><span class="tag">NHÀ TÂM LÝ HỌC</span><span class="head" style="font-size:80px">Elizabeth Loftus</span>
+   <div class="sub hid" id="s7sub"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#0077B6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M24 6v34M14 42h20M8 12h32M8 12l-6 14h12zM40 12l-6 14h12zM2 26a6 4 0 0 0 12 0M34 26a6 4 0 0 0 12 0"/></svg>chuyên gia về lời khai nhân chứng</div></div>
+  <div class="abs hid" id="tv" style="left:275px;top:380px;width:440px;height:300px">
+   <div class="frame" style="inset:0;background:#1A1A1A;border-radius:28px;padding:16px"><div id="tvscreen" style="position:relative;width:100%;height:100%;border-radius:16px;background:#EAF4FA;overflow:hidden"></div></div>
+  </div>
+  <div class="abs hid" id="grpL" style="left:70px;top:760px"></div>
+  <div class="abs hid" id="grpR" style="left:560px;top:760px"></div>
+  <div class="paper hid" id="p74" style="left:590px;top:1010px;width:330px;padding:10px"><img src="assets/paper1974.png"></div>
+  <div class="chip hid" id="c74" style="left:420px;top:960px;font-size:28px">Loftus &amp; Palmer, 1974</div>
+ </div>
+
+ <!-- S8 two questions -->
+ <div class="scene" id="s8">
+  <div class="abs" style="left:494px;top:170px;width:4px;height:1060px;background:#E6EEF4"></div>
+  <div class="colhead hid" id="h1" style="left:270px">NHÓM 1</div>
+  <div class="colhead hid" id="h2" style="left:720px">NHÓM 2</div>
+  <div class="bubble hid" id="q1" style="left:60px;top:260px;width:420px;padding:30px 26px;font-size:46px;line-height:1.3">Hai xe <b style="font-weight:800;color:#0077B6">va</b> nhau chạy nhanh cỡ nào?</div>
+  <div class="bubble hid" id="q2" style="left:510px;top:260px;width:420px;padding:30px 26px;font-size:46px;line-height:1.3">Hai xe <span class="pill" id="dam" style="font-weight:800">ĐÂM SẦM</span> chạy nhanh cỡ nào?</div>
+  <div class="abs hid" id="f1" style="left:205px;top:640px"></div>
+  <div class="abs hid" id="f2" style="left:655px;top:640px"></div>
+  <svg class="abs hid" id="sp1" style="left:120px;top:960px" width="300" height="190" viewBox="0 0 200 126"><path d="M20 106A80 80 0 0 1 180 106" fill="none" stroke="#E6EEF4" stroke-width="16" stroke-linecap="round"/><path d="M20 106A80 80 0 0 1 180 106" fill="none" stroke="#0077B6" stroke-width="16" stroke-linecap="round" stroke-dasharray="4 18" opacity=".35"/><line class="needle" x1="100" y1="106" x2="100" y2="40" stroke="#1A1A1A" stroke-width="7" stroke-linecap="round"/><circle cx="100" cy="106" r="10" fill="#1A1A1A"/></svg>
+  <svg class="abs hid" id="sp2" style="left:570px;top:960px" width="300" height="190" viewBox="0 0 200 126"><path d="M20 106A80 80 0 0 1 180 106" fill="none" stroke="#E6EEF4" stroke-width="16" stroke-linecap="round"/><path d="M20 106A80 80 0 0 1 180 106" fill="none" stroke="#0077B6" stroke-width="16" stroke-linecap="round" stroke-dasharray="4 18" opacity=".35"/><line class="needle" x1="100" y1="106" x2="100" y2="40" stroke="#1A1A1A" stroke-width="7" stroke-linecap="round"/><circle cx="100" cy="106" r="10" fill="#1A1A1A"/></svg>
+ </div>
+
+ <!-- S9 broken glass -->
+ <div class="scene" id="s9">
+  <div class="abs hid" id="cal" style="left:345px;top:360px;width:300px;height:300px"></div>
+  <div class="abs hid" id="callab" style="left:0;width:990px;top:700px;text-align:center;font-size:72px;font-weight:800;color:#0077B6">+7 ngày</div>
+  <div class="card hid" id="s9card" style="top:180px"><span class="tag">CÂU HỎI BẪY</span><span class="head" style="font-size:76px">Bạn có thấy <span class="pill">kính vỡ</span> không?</span></div>
+  <div class="frame hid" id="mini" style="left:60px;top:620px;width:400px;height:240px"></div>
+  <div class="abs hid" id="check" style="left:60px;top:880px;width:400px;text-align:center;font-size:38px;font-weight:800;color:#0A9E78"><span style="color:#3CE8B4;font-size:46px">✔</span> 0 mảnh kính</div>
+  <div class="abs hid" id="thinker" style="left:790px;top:1010px"></div>
+  <div class="abs hid" id="thought" style="left:500px;top:600px;width:430px;height:300px">
+   <div class="bubble" style="inset:0;position:absolute;border-radius:120px;overflow:hidden;padding:30px 40px"><div id="dream" style="position:relative;width:100%;height:100%"></div></div>
+   <div class="bubble" style="left:300px;top:310px;width:44px;height:44px;border-radius:50%"></div>
+   <div class="bubble" style="left:340px;top:370px;width:26px;height:26px;border-radius:50%"></div>
+  </div>
+  <div class="barc hid" id="b1" style="left:180px;height:190px;background:#9AA3AE"></div>
+  <div class="barc hid" id="b2" style="left:610px;height:380px"></div>
+  <div class="blab hid" id="bl1" style="left:280px">NHÓM 1</div>
+  <div class="blab hid" id="bl2" style="left:710px">NHÓM 2</div>
+  <div class="bluepill hid" id="x2" style="left:640px;top:680px;font-size:52px"><span id="x2a">x1</span><span id="x2b" style="position:absolute;left:34px;opacity:0">x2</span></div>
+ </div>
+
+ <!-- S10 misinformation -->
+ <div class="scene" id="s10">
+  <div class="chip hid" id="memtag" style="left:395px;top:180px">KÝ ỨC</div>
+  <div class="abs hid" id="film" style="left:145px;top:270px;width:700px;height:480px;background:#1A1A1A;border-radius:24px;padding:56px 26px">
+   <div id="filmholes" class="abs" style="left:0;right:0;top:0;bottom:0"></div>
+   <div id="filmscreen" style="position:relative;width:100%;height:100%;background:#EAF4FA;border-radius:10px;overflow:hidden"></div>
+  </div>
+  <div class="bluepill hid" id="flyword" style="left:560px;top:620px;font-size:46px">đâm sầm</div>
+  <div class="card hid" id="s10card" style="top:860px"><span class="tag">HIỆN TƯỢNG</span><span class="head" style="font-size:80px"><span class="pill">misinformation</span> effect</span></div>
+ </div>
+
+ <!-- S12 CTA -->
+ <div class="scene" id="s12">
+  <img class="abs hid" id="logo" src="assets/logo.svg" style="left:305px;top:170px;width:380px;height:380px;border-radius:48px">
+  <div class="card hid" id="s12card" style="top:620px"><span class="tag">TẬP SAU</span><span class="head">Cài <span class="pill">ký ức giả</span></span></div>
+  <div class="bluepill hid" id="follow" style="left:370px;top:940px;font-size:48px">Follow</div>
+ </div>
+</div>
+
+<div id="vwrap"><video id="v55" class="clip" src="assets/vid55.mp4" muted playsinline data-start="__S11__" data-duration="__S11LEN__" data-track-index="1"></video></div>
+<div id="s11ov" class="clip" data-start="__S11__" data-duration="__S11LEN__" data-track-index="2">
+ <div class="abs" id="rec" style="left:60px;top:180px;padding:10px 26px;border-radius:14px;background:#0077B6;color:#fff;font-size:40px;font-weight:800">▶ REC
+  <div id="recstrike" style="position:absolute;left:-10px;top:30px;width:190px;height:7px;background:#fff;border-radius:4px;box-shadow:0 0 0 3px #1A1A1A;transform-origin:left center"></div></div>
+ <div class="card" id="s11card" style="top:1000px;opacity:0"><span class="head" id="s11a" style="font-size:84px">Não <span class="pill">dựng lại</span></span>
+  <span class="head" id="s11b" style="font-size:76px;position:absolute;left:0;right:0;top:34px;opacity:0">đôi khi <span class="pill">dựng sai</span></span></div>
+</div>
+
+<div id="caps" class="clip" data-start="0" data-duration="__DUR__" data-track-index="3"></div>
+</div>
+
+<script>
+const T = __T__;
+const CAPS = __CAPS__;
+const $ = (s) => document.querySelector(s);
+const tl = gsap.timeline({ paused: true, defaults: { immediateRender: false } });
+tl.fromTo("#barfill", { scaleX: 0 }, { scaleX: 0, duration: 0.01, immediateRender: true }, 0);
+
+// ---------- helpers ----------
+const show = (s, t) => tl.set(s, { visibility: "visible" }, t);
+const hide = (s, t) => tl.set(s, { visibility: "hidden" }, t);
+const fadeIn = (s, t, d = 0.25) => tl.fromTo(s, { opacity: 0 }, { opacity: 1, duration: d, ease: "power2.out" }, t);
+const fadeOut = (s, t, d = 0.2) => tl.to(s, { opacity: 0, duration: d, ease: "power2.in" }, t);
+const pop = (s, t, d = 0.28) => tl.fromTo(s, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: d, ease: "back.out(2.2)" }, t);
+const slideUp = (s, t, dy = 90) => tl.fromTo(s, { opacity: 0, y: dy }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" }, t);
+const card = (s, t) => { slideUp(s, t); tl.fromTo(`${s} .tag, ${s} > .head`, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.25, stagger: 0.08, ease: "power2.out" }, t + 0.05); };
+const push = (s, t0, t1, to = 1.06) => tl.fromTo(s, { scale: 1 }, { scale: to, duration: Math.max(0.1, t1 - t0), ease: "none" }, t0);
+const cut = (a, b, t) => { hide(a, t); show(b, t); };
+const whip = (a, b, t) => {
+  tl.to(a, { x: -260, filter: "blur(22px)", duration: 0.1, ease: "power2.in" }, t - 0.1);
+  hide(a, t);
+  show(b, t);
+  tl.fromTo(b, { x: 260, filter: "blur(22px)" }, { x: 0, filter: "blur(0px)", duration: 0.1, ease: "power2.out" }, t);
+};
+
+// flat white figure: head, dot eyes, arms on pivots
+function figure(id, s = 1) {
+  return `<svg id="${id}" width="${120 * s}" height="${270 * s}" viewBox="-60 -200 120 270" overflow="visible">
+   <g fill="#fff" stroke="#1A1A1A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="-12" y1="-8" x2="-16" y2="58"/><line x1="12" y1="-8" x2="16" y2="58"/>
+    <g class="armL"><line x1="-24" y1="-104" x2="-46" y2="-44"/></g>
+    <g class="armR"><line x1="24" y1="-104" x2="46" y2="-44"/></g>
+    <path d="M-26 -112Q0 -122 26 -112L22 -8Q0 2 -22 -8Z"/>
+    <circle cx="0" cy="-150" r="32"/></g>
+   <circle cx="-11" cy="-152" r="4" fill="#1A1A1A"/><circle cx="11" cy="-152" r="4" fill="#1A1A1A"/></svg>`;
+}
+// two simple cars on a road; shards hidden
+function crash(id) {
+  const car = (c, x, flip) => `<g class="${c}" transform="translate(${x} 0)"><g transform="${flip ? "translate(90 0) scale(-1 1)" : ""}">
+    <rect x="0" y="112" width="90" height="34" rx="10" fill="${flip ? "#9AA3AE" : "#0077B6"}" stroke="#1A1A1A" stroke-width="3"/>
+    <path d="M18 112l10-22h30l14 22z" fill="#fff" stroke="#1A1A1A" stroke-width="3" stroke-linejoin="round"/>
+    <circle cx="22" cy="148" r="11" fill="#1A1A1A"/><circle cx="68" cy="148" r="11" fill="#1A1A1A"/></g></g>`;
+  let sh = "";
+  for (let i = 0; i < 9; i++) {
+    const a = (i / 9) * Math.PI * 2, r1 = 14, r2 = 44 + (i % 3) * 14;
+    sh += `<line x1="${180 + Math.cos(a) * r1}" y1="${112 + Math.sin(a) * r1}" x2="${180 + Math.cos(a) * r2}" y2="${112 + Math.sin(a) * r2}"/>`;
+    sh += `<polygon points="${180 + Math.cos(a) * (r2 + 8)},${112 + Math.sin(a) * (r2 + 8)} ${180 + Math.cos(a + 0.2) * (r2 + 22)},${112 + Math.sin(a + 0.2) * (r2 + 22)} ${180 + Math.cos(a - 0.15) * (r2 + 20)},${112 + Math.sin(a - 0.15) * (r2 + 20)}" fill="#BFE6FA"/>`;
+  }
+  return `<svg id="${id}" viewBox="0 0 360 200" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">
+   <line x1="0" y1="160" x2="360" y2="160" stroke="#9AA3AE" stroke-width="4" stroke-dasharray="16 12"/>
+   ${car("c1", 36, false)}${car("c2", 234, true)}
+   <g class="sh" stroke="#1A1A1A" stroke-width="3" opacity="0">${sh}</g></svg>`;
+}
+function crashAnim(id, t, fast) {
+  const d = fast ? 0.35 : 1.1;
+  tl.fromTo(`#${id} .c1`, { x: 0 }, { x: 55, duration: d, ease: fast ? "power4.in" : "power1.inOut" }, t);
+  tl.fromTo(`#${id} .c2`, { x: 0 }, { x: -55, duration: d, ease: fast ? "power4.in" : "power1.inOut" }, t);
+  if (fast) {
+    tl.to(`#${id}`, { x: 6, duration: 0.04, yoyo: true, repeat: 5, ease: "none" }, t + d);
+    tl.to(`#${id} .c1`, { x: 20, rotation: -8, svgOrigin: "80 150", duration: 0.3, ease: "power2.out" }, t + d);
+    tl.to(`#${id} .c2`, { x: -20, rotation: 8, svgOrigin: "280 150", duration: 0.3, ease: "power2.out" }, t + d);
+  } else {
+    tl.to(`#${id} .c1`, { x: 48, duration: 0.25, ease: "power2.out" }, t + d);
+    tl.to(`#${id} .c2`, { x: -48, duration: 0.25, ease: "power2.out" }, t + d);
+  }
+}
+
+// ---------- S1 ----------
+show("#s1", 0);
+push("#s1img", 0, T.S2);
+card("#s1card", Math.min(T.S1_tri, 0.3));
+pop("#ear", T.S1_nghe);
+tl.to("#ear", { scale: 1.18, duration: 0.18, yoyo: true, repeat: 1, ease: "sine.inOut" }, T.S1_nghe + 0.3);
+
+// ---------- S2 word list ----------
+whip("#s1", "#slist", T.S2);
+const WORDS = ["Giường", "Nghỉ ngơi", "Mệt", "Mơ", "Chợp mắt", "Chăn", "Ngáy", "Gối", "Ngáp", "Đêm"];
+const CX = 495, CY = 1030, SC = 120 / 56;
+WORDS.forEach((w, i) => {
+  const sx = i < 5 ? 290 : 700, sy = 290 + (i % 5) * 110;
+  const el = document.createElement("div");
+  el.className = "lw"; el.id = "lw" + i; el.textContent = w;
+  el.style.left = sx + "px"; el.style.top = sy + "px";
+  $("#list").appendChild(el);
+  const t = T.list[i], next = i < 9 ? T.list[i + 1] : T.S3;
+  tl.fromTo(el, { opacity: 0, x: CX - sx, y: CY - sy, scale: SC * 0.6 }, { opacity: 1, scale: SC, duration: 0.22, ease: "back.out(2)" }, t);
+  tl.to(el, { x: 0, y: 0, scale: 1, duration: 0.28, ease: "power3.out" }, Math.max(t + 0.25, next - 0.02));
+  tl.to("#barfill", { scaleX: (i + 1) / 10, duration: 0.2, ease: "power2.out" }, t);
+});
+
+// ---------- S3 question ----------
+tl.to("#list", { opacity: 0.3, filter: "blur(5px)", duration: 0.3 }, T.S3);
+tl.to("#bar", { opacity: 0, duration: 0.3 }, T.S3);
+pop("#ngu", T.S3_ngu, 0.32);
+tl.fromTo(["#optY", "#optN"], { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.25, stagger: 0.08, ease: "power2.out" }, T.S3_ngu + 0.25);
+tl.fromTo("#cursor", { opacity: 0, x: 820, y: 1260 }, { opacity: 1, x: 430, y: 1160, duration: 1.6, ease: "power2.inOut" }, T.S3_ngu + 0.5);
+
+// ---------- S4 reveal ----------
+tl.to("#cursor", { x: 360, y: 1130, duration: 0.25, ease: "power2.out" }, T.S4_chuc - 0.25);
+tl.to("#cursor", { scale: 0.85, duration: 0.08, yoyo: true, repeat: 1 }, T.S4_chuc);
+tl.to("#optY", { backgroundColor: "#0077B6", color: "#fff", borderColor: "#0077B6", scale: 0.94, duration: 0.1 }, T.S4_chuc);
+tl.to("#optY", { scale: 1, duration: 0.15 }, T.S4_chuc + 0.1);
+for (let i = 0; i < 18; i++) {
+  const c = document.createElement("div");
+  const a = -Math.PI * (0.1 + 0.8 * (i / 17)), r = 110 + (i % 4) * 30;
+  c.style.cssText = `position:absolute;width:${10 + (i % 3) * 4}px;height:${6 + (i % 2) * 5}px;background:${i % 3 ? "#3CE8B4" : "#0077B6"};border-radius:2px;opacity:0`;
+  $("#confetti").appendChild(c);
+  tl.fromTo(c, { opacity: 1, x: 0, y: 0, rotation: 0 }, { x: Math.cos(a) * r, y: Math.sin(a) * r, rotation: 200 + i * 20, duration: 0.7, ease: "power2.out" }, T.S4_chuc + 0.02);
+  tl.to(c, { opacity: 0, duration: 0.25 }, T.S4_chuc + 0.5);
+}
+$("#clapper").innerHTML = figure("clap", 1.1);
+pop("#clapper", T.S4_chuc + 0.1);
+for (let k = 0; k < 4; k++) {
+  const t = T.S4_chuc + 0.35 + k * 0.42;
+  tl.to("#clap .armL", { rotation: -60, svgOrigin: "-24 -104", duration: 0.2, ease: "sine.in" }, t);
+  tl.to("#clap .armR", { rotation: 60, svgOrigin: "24 -104", duration: 0.2, ease: "sine.in" }, t);
+  tl.to("#clap .armL", { rotation: -35, svgOrigin: "-24 -104", duration: 0.2, ease: "sine.out" }, t + 0.2);
+  tl.to("#clap .armR", { rotation: 35, svgOrigin: "24 -104", duration: 0.2, ease: "sine.out" }, t + 0.2);
+}
+fadeOut(["#ngu", "#optY", "#optN", "#cursor", "#clapper"], T.S4_kyuc - 0.1, 0.2);
+card("#s4card", T.S4_kyuc);
+tl.to("#list", { opacity: 1, filter: "blur(0px)", duration: 0.3 }, T.S4_khong);
+tl.fromTo("#scan", { opacity: 1, y: 0 }, { opacity: 1, y: 540, duration: 0.8, ease: "none" }, T.S4_khong + 0.1);
+tl.to("#scan", { opacity: 0, duration: 0.15 }, T.S4_khong + 0.9);
+pop("#slot", T.S4_khong + 0.9);
+tl.fromTo("#strike", { scaleX: 0 }, { immediateRender: true, scaleX: 1, duration: 0.3, ease: "power2.out" }, T.S4_khong + 1.3);
+
+// ---------- S5 DRM ----------
+cut("#slist", "#s5", T.S5);
+pop("#drmpill", T.S5_drm);
+slideUp("#drmframe", T.S5_drm, 60);
+push("#drmimg", T.S5_drm, T.S6);
+pop("#n1", T.S5_n1); pop("#n2", T.S5_n2); pop("#n3", T.S5_n3);
+tl.fromTo("#p95", { opacity: 0, x: 700, rotation: -3 }, { opacity: 1, x: 0, rotation: -3, duration: 0.3, ease: "power3.out" }, T.S5_paper);
+tl.fromTo("#m95", { scaleX: 0 }, { immediateRender: true, scaleX: 1, duration: 0.3, ease: "power2.out" }, T.S5_paper + 0.35);
+pop("#c95", T.S5_paper + 0.45);
+
+// ---------- S6 network ----------
+cut("#s5", "#s6", T.S6);
+pop("#lydo", T.S6);
+fadeOut("#lydo", T.S6_mang - 0.15, 0.15);
+const NCX = 495, NCY = 860, R = 330;
+let svg = "";
+const pos = WORDS.map((w, i) => { const a = -Math.PI / 2 + (i * 2 * Math.PI) / 10; return [NCX + Math.cos(a) * R * 1.05, NCY + Math.sin(a) * R]; });
+pos.forEach(([x, y], i) => {
+  const [x2, y2] = pos[(i + 1) % 10];
+  svg += `<line class="ln" x1="${x}" y1="${y}" x2="${NCX}" y2="${NCY}" stroke="#C9D2DC" stroke-width="4"/>`;
+  svg += `<line class="ln" x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" stroke="#C9D2DC" stroke-width="4"/>`;
+  const n = document.createElement("div");
+  n.className = "node"; n.id = "nd" + i; n.style.left = x + "px"; n.style.top = y + "px"; n.style.opacity = 0;
+  n.innerHTML = `${WORDS[i]}<div class="on">${WORDS[i]}</div>`;
+  $("#nodes").appendChild(n);
+  const d = document.createElement("div");
+  d.className = "dot"; d.id = "dt" + i; d.style.left = x + "px"; d.style.top = y + "px";
+  $("#nodes").appendChild(d);
+});
+$("#net").innerHTML = svg;
+document.querySelectorAll("#net .ln").forEach((l) => {
+  const len = Math.hypot(l.x2.baseVal.value - l.x1.baseVal.value, l.y2.baseVal.value - l.y1.baseVal.value);
+  l.setAttribute("stroke-dasharray", len); l.setAttribute("stroke-dashoffset", len);
+});
+tl.to("#net .ln", { strokeDashoffset: 0, duration: 0.45, stagger: 0.008, ease: "power2.out" }, T.S6_mang);
+tl.fromTo(".node", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.25, stagger: 0.03, ease: "back.out(2)" }, T.S6_mang);
+pop("#core", T.S6_mang + 0.3);
+WORDS.forEach((w, i) => {
+  const t = T.S6_kich + i * 0.14;
+  tl.to(`#nd${i} .on`, { opacity: 1, duration: 0.18 }, t);
+  tl.fromTo(`#dt${i}`, { opacity: 1, x: 0, y: 0 }, { x: NCX - pos[i][0], y: NCY - pos[i][1], duration: 0.7, ease: "power1.in" }, t + 0.1);
+  tl.to(`#dt${i}`, { opacity: 0, duration: 0.1 }, t + 0.8);
+});
+tl.to("#net .ln", { stroke: "#8CC4E3", duration: 0.4 }, T.S6_kich + 0.3);
+card("#s6card", T.S6_term);
+fadeOut("#s6card", T.S6_nghedu, 0.25);
+tl.to("#corefill", { opacity: 1, duration: 0.25 }, T.S6_sang);
+tl.to("#core", { boxShadow: "0 0 70px 20px rgba(0,119,182,.55)", duration: 0.22, yoyo: true, repeat: 3, ease: "sine.inOut" }, T.S6_sang + 0.1);
+tl.to("#net .ln", { stroke: "#0077B6", duration: 0.12, yoyo: true, repeat: 1 }, T.S6_sang + 0.1);
+tl.to([".node", "#net"], { opacity: 0.25, duration: 0.25 }, T.S6_tuong - 0.1);
+pop("#brain", T.S6_tuong);
+pop("#brainsay", T.S6_tuong + 0.25);
+tl.to("#brain", { rotation: 8, duration: 0.18, yoyo: true, repeat: 3, ease: "sine.inOut", transformOrigin: "50% 100%" }, T.S6_tuong + 0.6);
+
+// ---------- S7 Loftus ----------
+whip("#s6", "#s7", T.S7);
+fadeIn("#lofwrap", T.S7, 0.2);
+push("#lofimg", T.S7, T.S7_hai);
+card("#s7card", T.S7_name);
+fadeIn("#s7sub", T.S7_loi);
+fadeOut("#s7card", T.S7_hai - 0.1, 0.2);
+tl.to("#lofwrap", { scale: 0.3, x: -354, y: -189, duration: 0.35, ease: "power3.inOut" }, T.S7_hai);
+pop("#tv", T.S7_hai + 0.1);
+$("#grpL").innerHTML = figure("g1", 0.6) + figure("g2", 0.6) + figure("g3", 0.6);
+$("#grpR").innerHTML = figure("g4", 0.6) + figure("g5", 0.6) + figure("g6", 0.6);
+tl.fromTo(["#grpL", "#grpR"], { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.3, stagger: 0.08, ease: "power2.out" }, T.S7_hai + 0.2);
+tl.fromTo("#p74", { opacity: 0, scale: 0.6, rotation: -3 }, { opacity: 1, scale: 1, rotation: -3, duration: 0.3, ease: "back.out(2)" }, T.S7_hai + 0.35);
+pop("#c74", T.S7_hai + 0.5);
+$("#tvscreen").innerHTML = crash("tvcrash");
+crashAnim("tvcrash", T.S7_video + 0.1, false);
+
+// ---------- S8 two questions ----------
+cut("#s7", "#s8", T.S8);
+pop("#h1", T.S8);
+pop("#q1", T.S8 + 0.1);
+$("#f1").innerHTML = figure("fa", 0.7);
+$("#f2").innerHTML = figure("fb", 0.7);
+pop("#f1", T.S8 + 0.2);
+pop("#h2", T.S8_hai);
+pop("#q2", T.S8_hai + 0.1);
+pop("#f2", T.S8_hai + 0.2);
+tl.to("#dam", { x: 6, duration: 0.033, yoyo: true, repeat: 5, ease: "none" }, T.S8_dam);
+fadeIn(["#sp1", "#sp2"], T.S8_doan);
+tl.fromTo("#sp1 .needle", { rotation: -80, svgOrigin: "100 106" }, { rotation: -15, svgOrigin: "100 106", duration: 0.8, ease: "back.out(1.4)" }, T.S8_doan + 0.1);
+tl.fromTo("#sp2 .needle", { rotation: -80, svgOrigin: "100 106" }, { rotation: 62, svgOrigin: "100 106", duration: 1, ease: "back.out(1.4)" }, T.S8_doan + 0.1);
+
+// ---------- S9 broken glass ----------
+cut("#s8", "#s9", T.S9);
+let pages = "";
+for (let i = 7; i >= 0; i--) pages += `<div class="page" id="pg${i}"><div class="top"></div>${i === 0 ? "+7" : i}</div>`;
+$("#cal").innerHTML = pages;
+pop("#cal", T.S9);
+for (let i = 7; i >= 1; i--) tl.to(`#pg${i}`, { rotationX: -100, opacity: 0, duration: 0.12, ease: "power1.in" }, T.S9 + 0.25 + (7 - i) * 0.06);
+pop("#callab", T.S9 + 0.8);
+tl.to(["#cal", "#callab"], { opacity: 0, y: -60, duration: 0.2 }, T.S9_bay - 0.1);
+card("#s9card", T.S9_bay);
+$("#mini").innerHTML = crash("minicrash");
+pop("#mini", T.S9_khong);
+crashAnim("minicrash", T.S9_khong + 0.15, false);
+pop("#check", T.S9_khong + 1.4);
+$("#thinker").innerHTML = figure("th", 0.7);
+pop("#thinker", T.S9_tuong - 0.2);
+pop("#thought", T.S9_tuong);
+$("#dream").innerHTML = crash("dreamcrash");
+crashAnim("dreamcrash", T.S9_tuong + 0.3, true);
+tl.fromTo("#dreamcrash .sh", { opacity: 0, scale: 0.2, svgOrigin: "180 112" }, { opacity: 1, scale: 1, svgOrigin: "180 112", duration: 0.25, ease: "back.out(2)" }, T.S9_vo);
+tl.to("#mini", { boxShadow: "0 0 0 8px #3CE8B4", duration: 0.15, yoyo: true, repeat: 1 }, T.S9_vo + 0.1);
+fadeOut(["#mini", "#check", "#thinker", "#thought"], T.S9_gap - 0.1, 0.2);
+fadeIn(["#bl1", "#bl2"], T.S9_gap);
+tl.fromTo(["#b1", "#b2"], { opacity: 1, scaleY: 0 }, { scaleY: 1, duration: 0.5, stagger: 0.1, ease: "power3.out" }, T.S9_gap);
+pop("#x2", T.S9_gap + 0.3);
+tl.to("#x2a", { opacity: 0, duration: 0.1 }, T.S9_gap + 0.6);
+tl.to("#x2b", { opacity: 1, duration: 0.1 }, T.S9_gap + 0.6);
+tl.to("#x2", { scale: 1.2, duration: 0.12, yoyo: true, repeat: 1 }, T.S9_gap + 0.6);
+
+// ---------- S10 misinformation ----------
+cut("#s9", "#s10", T.S10);
+let holes = "";
+for (let i = 0; i < 9; i++) holes += `<div style="position:absolute;left:${34 + i * 76}px;top:16px;width:34px;height:22px;border-radius:5px;background:#fff"></div><div style="position:absolute;left:${34 + i * 76}px;bottom:16px;width:34px;height:22px;border-radius:5px;background:#fff"></div>`;
+$("#filmholes").innerHTML = holes;
+$("#filmscreen").innerHTML = crash("filmcrash") +
+  `<svg id="scribble" viewBox="0 0 360 200" style="position:absolute;inset:0;width:100%;height:100%"><g fill="none" stroke="#0077B6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+   <path d="M180 112l-30-40 12 20-40-6M180 112l38-44-10 22 44-8M180 112l-36 46M180 112l44 40-18-4M180 112l-60 10M180 112l62 6"/></g></svg>`;
+pop("#memtag", T.S10);
+pop("#film", T.S10 + 0.05);
+tl.set("#filmcrash .c1", { x: 48 }, T.S10);
+tl.set("#filmcrash .c2", { x: -48 }, T.S10);
+document.querySelectorAll("#scribble path").forEach((p) => { p.setAttribute("stroke-dasharray", 900); p.setAttribute("stroke-dashoffset", 900); });
+tl.fromTo("#flyword", { opacity: 0, x: 500, rotation: 12 }, { opacity: 1, x: 0, rotation: -4, duration: 0.3, ease: "power3.out" }, T.S10_de - 0.3);
+tl.to("#scribble path", { strokeDashoffset: 0, duration: 0.6, ease: "power1.inOut" }, T.S10_de);
+card("#s10card", T.S10_mis);
+
+// ---------- S11 memory is rebuilt ----------
+hide("#s10", T.S11);
+tl.fromTo("#vwrap", { x: 260, filter: "blur(22px)" }, { x: 0, filter: "blur(0px)", duration: 0.1, ease: "power2.out" }, T.S11);
+tl.fromTo("#rec", { opacity: 0 }, { opacity: 1, duration: 0.2 }, T.S11);
+tl.fromTo("#recstrike", { scaleX: 0 }, { immediateRender: true, scaleX: 1, duration: 0.25, ease: "power2.out" }, T.S11_khong);
+tl.fromTo("#s11card", { opacity: 0, y: 90 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" }, T.S11_dung);
+tl.to("#s11a", { x: 10, textShadow: "-8px 0 #ff2a55, 8px 0 #00e5ff", duration: 0.033 }, T.S11_sai);
+tl.to("#s11a", { x: -8, duration: 0.033 }, T.S11_sai + 0.033);
+tl.set("#s11a", { opacity: 0 }, T.S11_sai + 0.066);
+tl.set("#s11b", { opacity: 1 }, T.S11_sai + 0.066);
+
+// ---------- S12 CTA ----------
+show("#s12", T.S12);
+tl.fromTo("#logo", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2.5)" }, T.S12);
+pop("#follow", T.S12_follow);
+tl.to("#follow", { scale: 1.12, duration: 0.18, yoyo: true, repeat: 1, ease: "sine.inOut" }, T.S12_follow + 0.35);
+card("#s12card", T.S12_phan);
+
+// ---------- captions ----------
+const KEY = /^(drm|spreading|activation|đâm|sầm|misinformation|effect|giả)$/i;
+CAPS.forEach((c, i) => {
+  const d = document.createElement("div");
+  d.className = "cap"; d.id = "cap" + i;
+  d.innerHTML = `<div class="in">${c.w.map(([w], j) => `<span class="${KEY.test(w.replace(/[,.?!]/g, "")) ? "k" : ""}" id="cw${i}_${j}">${w}</span>`).join(" ")}</div>`;
+  $("#caps").appendChild(d);
+  tl.set(d, { visibility: "visible" }, c.s);
+  tl.set(d, { visibility: "hidden" }, c.e);
+  c.w.forEach(([, t], j) => tl.set(`#cw${i}_${j}`, { opacity: 1 }, t));
+});
+
+tl.set({}, {}, T.END);
+window.__timelines["ep01"] = tl;
+</script>
+</body>
+</html>
