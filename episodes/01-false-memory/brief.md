@@ -1,116 +1,128 @@
-# EP01 False Memory: post-production brief v2 (for Claude Code)
+# EP01 False Memory v3 (with chuột tím): post-production brief
 
-## Inputs (match by filename, any extension)
+Full rebuild of EP01. The old edit is discarded. New AI voice, same content, plus the purple rat as the on-screen guide.
+
+## Inputs
 | File | What it is | Scene |
 |---|---|---|
-| `voice/audio1.m4a` (46.0s) | VO part 1: hook, test, DRM, spreading activation | S1 to S6 |
-| `voice/audio2.m4a` (60.2s) | VO part 2: Loftus, misinformation effect, ending | S7 to S12 |
-| `bed` | photo of a bed | S1 opening |
+| `voice/audio_ep1.mp3` (88.1s, -22.2 LUFS) | new AI voiceover v2 | all |
+| `script.md` | exact VO text (v3, with chuột tím) | captions + sync |
 | `drm` | DRM image | S5 |
 | `1995` | Roediger & McDermott (1995) paper | S5 |
-| `elizabeth loftus` | portrait of Loftus | S7 |
 | `1974` | Loftus & Palmer (1974) paper | S7 |
-| `vid 5.5` | 5.5s video clip for the "memory is rebuilt" moment | S11 |
-| `brand/logo.svg` | channel logo | S12 |
-| `script.md` | exact VO text | captions |
+| `elizabeth_loftus` | portrait | S7 |
+| `vid_5_5` | 5.5s clip, "memory is rebuilt" | S11 |
+| `brand/logo.svg`, `logo_rat_avatar` | logos | corner, S12 |
+| `brand/mascot/rat_mascot.py` | purple rat generator | all |
 
-No faces of Deese, Roediger or McDermott. The channel is faceless: no person on camera, only images, animation and cards.
+Match assets by basename, any extension. Rename anything with spaces to snake_case first. **Do not use `bed`**: it has been removed.
 
 ## Global spec
-- TikTok 1080x1920, 30fps, H.264 + AAC 48kHz, 10 Mbps.
-- **Audio:** voice only. No music, no SFX. -14 LUFS, high-pass at 80Hz, light de-noise.
-- **Edit:** join audio1 then audio2. Cut every pause over 0.25s down to 0.12s, and remove breaths. Keep the pauses inside the word list (S2) at their natural length, because the rhythm matters there.
-- **Sync rule:** timestamps below come from the RAW files (pause detection). First run Whisper word timestamps on the joined, cut audio. Then trigger every cue on its **anchor word** (in quotes). Never trigger by seconds alone.
-- **Colour:** white #FFFFFF base. Accent #0077B6, used sparingly. Text #1A1A1A. Mint #3CE8B4 for tiny details only.
-- **Font:** Be Vietnam Pro. Headlines ExtraBold, body SemiBold.
-- **Card:** frosted glass (white 72%, blur 20, radius 32, shadow 0 12 40 rgba(0,0,0,.12)). Small caps tagline (28px, #0077B6) above a big headline (80 to 96px). One key word in a #0077B6 pill with white text.
-- **Photos:** never static. Slow push-in 1.00 to 1.06 across the shot, or a slight drift of 20px.
-- **Paper images:** show on a white "paper" card rotated -3°, with a soft shadow. Highlight the title line with a #0077B6 marker sweep (left to right, 300ms).
-- **Motion:** ease-out, 200 to 300ms. Staggered reveals 80ms apart. A new visual beat every 3 to 5s.
-- **Characters:** flat white figure, thin #1A1A1A outline, dot eyes. One consistent style.
-- **Captions:** word-synced, 5 to 7 words per line, max 2 lines, white on a #000 55% pill. Bottom edge at y=1440, x between 60 and 930. The current key term is coloured #0077B6. Hide captions during S2.
-- **Transitions:** hard cuts. A 6-frame whip only at S1→S2, S6→S7 and S10→S11.
+- **Video:** 1440x2560, 30fps, H.264 + AAC 48kHz, ~18 Mbps. Scale all sizes for 1440 wide.
+- **Audio:** voice only. No music, no SFX. Loudness from -22.2 to -14 LUFS, true peak -1 dB. Cut pauses longer than 0.3s down to 0.15s, **except** the 10-word list (keep its natural rhythm) and the ~1s beat after "Không hề có từ 'ngủ'" (keep it for the reveal). Target final length ~80s.
+- **Sync:** the raw times next to each scene come from pause detection on `audio_ep1.mp3` and are approximate (± 1s), especially S2 to S4. Run Whisper word timestamps first, then trigger every cue on the **anchor word** in quotes.
+- **Font:** Be Vietnam Pro. It must render every Vietnamese diacritic; check "Ký ức", "ngủ", "đâm sầm", "lệch".
+- **Colour:** #0077B6 main, mint #3CE8B4 secondary, text #1A1A1A.
+- **Background:** never plain white. Soft gradient #EAF4FB → white (or mint tint), dot grid or blurred blobs at 8 to 15%, drifting slowly.
+- **Fill the frame:** no big empty areas. Headlines 100 to 140px. Frosted cards (white 72%, blur 24, radius 40, soft shadow). Icons fill the gaps.
+- **Photos:** always moving (push-in 1.00 → 1.06), rounded 40px frames.
+- **Captions:** word-synced, 5 to 7 words per line, white on a #000 55% pill, bottom edge at y=1920, x 80 to 1240, key terms in #0077B6. **Hide captions during the word list (S2).**
+- **Safe zone:** y 200 to 1920, x 80 to 1240.
+- **Transitions:** hard cuts. A 6-frame whip only at S3→S4, S6→S7, S10→S11.
 
-## Scene list
+## Mascot (chuột tím)
+- Build the layered rig from `rat_mascot.py`. Props: round glasses (#1A1A1A thin frame), pointer stick (#0077B6 tip).
+- Build the action clips: idle (breathing bob, tail sway, blink every 3 to 4s), wave, point, teach (pointer tap), scratch head, glasses on/off, think, surprised, happy, nod, head shake, enter/exit.
+- Idle between actions. Light lip-flap while the VO plays.
+- Default position: lower-left or lower-right, 30 to 40% of frame height, never over captions or key text. Centre stage only in S1 and S4.
+- Motion: 200 to 400ms, ease-out with a small overshoot.
 
-### S1 Opening | audio1 0.86 to 6.5
-VO: "Trí nhớ của bạn có tốt không? Nghe kỹ 10 từ này nhé."
-- 0:00: `bed` full-screen, soft 20% white overlay, slow push-in. It sets the sleep theme without giving the answer away.
-- "Trí nhớ": card slides up from the bottom, tagline "TEST TRÍ NHỚ", headline "10 từ", pill on "10".
-- "Nghe kỹ": a small #0077B6 ear icon pulses once beside the card.
+## Scenes
 
-### S2 Word list | audio1 6.77 to ~14.4
-VO: the 10 words. Onsets approx.: Giường 6.77, Nghỉ ngơi 7.86, Mệt 8.75, Mơ 9.54, Chợp mắt 10.20, Chăn 11.09, Ngáy 11.75, Gối 12.69, Ngáp 13.41, Đêm 14.09.
-- Whip cut to a full-screen white background. `bed` stays behind at 8% opacity, blurred.
-- Each word pops into the centre on its onset (120px, #1A1A1A), holds, then shrinks and slides into a 2-column list (5 + 5) on the next onset.
-- A thin #0077B6 progress bar across the top fills 1/10 per word.
+### S1 Opening | raw 0.0 to 7.4s
+VO: "Trí nhớ của bạn có tốt không? Chuột tím có một bài test nhỏ. Nghe kỹ 10 từ này nhé."
+- 0:00: title card, large: "Kí ức sai lệch", with the pill "(False memory)". Tagline: "TEST TRÍ NHỚ".
+- "Trí nhớ": a "Độ tự tin vào trí nhớ" bar (mint border) fills 0 → 100% with a counter, then wiggles at 100%.
+- "Chuột tím": the rat **enters** centre-bottom with a bounce and **waves**.
+- "10 từ": 10 face-down cards (2 rows × 5, backs #0077B6 with a white "?") fly in staggered 80ms apart. The confidence bar shrinks to the top corner. The rat moves to the lower-right and goes idle.
 
-### S3 Question | audio1 ~14.4 to 17.46
+### S2 Word list (no captions) | raw 7.9 to ~22.8s
+VO: the 10 words.
+- On each word's onset, flip the matching card (250ms). The front is white with the word in #1A1A1A, 90px. Flipped cards stay in place.
+- A thin #0077B6 progress bar at the top fills 1/10 per word.
+- Rat: listens with a slight head tilt; its pupils follow each flipping card.
+
+### S3 Question | raw ~22.8 to ~26.0s
 VO: "Có từ 'ngủ' không?"
-- The list blurs to 30%. "ngủ?" pops in the centre (160px, #0077B6).
-- Two pill buttons below: "CÓ" / "KHÔNG". A hand cursor drifts toward "CÓ" and stops just before it. It is a tease, so it never clicks.
+- All 10 cards: **Gaussian blur 24px, opacity 35%, plus a 40% white overlay**, so no word is readable.
+- "ngủ?" pops in the centre (180px, #0077B6), sharp, with 2 sharp buttons below: "CÓ" / "KHÔNG". A cursor drifts toward "CÓ" and stops just short of it.
+- Rat: **think** (hand at chin), with a "?" popping.
 
-### S4 Reveal | audio1 18.13 to ~26.9
-VO: "Nếu bạn nói có, chúc mừng, bạn vừa tạo ra một ký ức giả. Không hề có từ 'ngủ'."
-- "chúc mừng": the cursor clicks "CÓ". A tiny mint confetti burst (sarcastic), and the white character does a slow clap.
+### S4 Reveal + rat joke | raw ~26.3 to 37.4s
+VO: "Nếu bạn nói có, chúc mừng, bạn vừa tạo ra một ký ức giả. Không hề có từ 'ngủ'. Lần đầu làm bài này, chuột tím cũng trượt."
+- "chúc mừng": the cursor clicks "CÓ", with a small sarcastic mint confetti burst.
 - "ký ức giả": card with tagline "BẠN VỪA TẠO RA", headline "ký ức giả", pill on "giả".
-- "Không hề có": the list comes back sharp. A #0077B6 scan line sweeps top to bottom over the 10 words. An empty dashed slot labelled "ngủ" appears below the list, then a #0077B6 line strikes through it.
+- "Không hề có": the cards unblur. A #0077B6 scan line sweeps them. An empty dashed card "ngủ" appears, then gets struck through.
+- "chuột tím cũng trượt": the rat moves to centre, puts a hand over its face and **shakes its head**, then gives a sheepish smile (1.5s).
 
-### S5 DRM | audio1 27.26 to 30.16
+### S5 DRM | raw 37.6 to 43.3s
 VO: "Đây là bài test DRM của các nhà tâm lý học Deese, Roediger và McDermott."
-- "DRM": `drm` image full-width in a rounded frame (radius 32), push-in. A pill "DRM" above it.
-- "Deese / Roediger / McDermott": three text-only name chips stagger in under the image, one on each name. No faces.
-- Last 1.2s ("McDermott"): the `1995` paper card slides in from the right on top, the title gets the marker sweep, and a chip reads "Roediger & McDermott, 1995".
+- "DRM": `drm` in a rounded frame, push-in, with a pill "DRM" above it.
+- On each name: a text-only name chip staggers in ("James Deese", "Henry Roediger", "Kathleen McDermott"). No faces.
+- "McDermott": the `1995` paper card slides in, tilted -3°, with a #0077B6 marker sweep on the title.
+- Rat: **glasses on** at "nhà tâm lý học", then **point** at the chips.
 
-### S6 Spreading activation | audio1 30.48 to 46.0
-VO: "Lý do: trong não, các từ liên quan nối với nhau như mạng lưới. Mỗi từ bạn nghe lại kích hoạt lan sang những từ bên cạnh, gọi là spreading activation. Nghe đủ nhiều từ về giấc ngủ, chữ 'ngủ' tự sáng đèn, và não tưởng mình vừa nghe thấy nó."
-- "mạng lưới": full-screen white. The 10 words become grey nodes in a ring, linked by thin lines, and draw in quickly (600ms). The centre node is empty.
-- "kích hoạt lan": nodes light up #0077B6 one after another, and ripple pulses travel along the lines toward the centre.
-- "spreading activation": term card slides in at the top, pill on "spreading activation". Hold until "Nghe đủ".
-- "sáng đèn": the centre node fills #0077B6 with a white "ngủ" label, a glow pulses twice, and all lines flash once.
-- "não tưởng": a simple brain icon pops next to the node with a speech bubble "nghe rồi mà!", then a small smug nod.
+### S6 Spreading activation | raw 43.7 to ~54.2s
+VO: "Lý do: trong não, các từ liên quan nối với nhau như mạng lưới ... spreading activation ... chữ 'ngủ' tự sáng đèn, và não tưởng mình vừa nghe thấy nó."
+- "mạng lưới": full-frame network; the 10 words are nodes in a ring with lines, and the centre node is empty.
+- "kích hoạt lan": nodes light up #0077B6 in sequence, with pulses flowing toward the centre.
+- "spreading activation": a term card at the top, pill on "spreading activation".
+- "sáng đèn": the centre node fills #0077B6 with "ngủ", glows twice, and all lines flash.
+- Rat: **teach**, tapping nodes with the pointer; on "tưởng mình vừa nghe thấy" it does a proud **nod**, as if fooled.
 
-### S7 Loftus | audio2 0.49 to 10.49
+### S7 Loftus | raw ~54.5 to ~59.5s
 VO: "Nhà tâm lý học Elizabeth Loftus, người cả đời nghiên cứu lời khai nhân chứng, cho hai nhóm xem cùng một video tai nạn xe."
-- Whip cut. "Elizabeth Loftus": `elizabeth loftus` photo in a large round crop, upper half, push-in. Card below: tagline "NHÀ TÂM LÝ HỌC", headline "Elizabeth Loftus".
-- "lời khai nhân chứng": a subline appears on the card, "chuyên gia về lời khai nhân chứng", with a small #0077B6 scale-of-justice icon.
-- "hai nhóm": the photo shrinks to a small circle top-left. `1974` paper card pops in lower-right, small, with a chip "Loftus & Palmer, 1974". Two groups of 3 white characters appear facing one TV.
-- "video tai nạn xe": the TV plays a flat animation of two simple cars bumping gently, with a clearly clean result: no glass, no debris.
+- "Elizabeth Loftus": `elizabeth_loftus` in a large round crop, with the name card "Elizabeth Loftus · nhà tâm lý học" and the subline "chuyên gia lời khai nhân chứng".
+- "hai nhóm": the photo shrinks top-left. The `1974` paper card pops lower-right (chip "Loftus & Palmer, 1974"). Two groups of 3 flat characters face a TV.
+- "video tai nạn xe": the TV shows 2 flat cars bumping gently, clearly with no glass.
+- Rat: **point** at the TV.
 
-### S8 Two questions | audio2 10.79 to ~26
-VO: Group 1 "va nhau" question, Group 2 "đâm sầm" question, "Nhóm đâm sầm đoán nhanh hơn."
-- "Nhóm một": split screen. Left column "NHÓM 1", speech bubble "Hai xe **va** nhau chạy nhanh cỡ nào?".
-- "Nhóm hai": right column "NHÓM 2", bubble with "**ĐÂM SẦM**" in the pill. That word alone shakes (3 frames, 6px).
-- "đoán nhanh hơn": a speedometer under each column. The needle sweeps: left to a medium level, right to a noticeably higher one. No numbers on screen.
+### S8 Two questions | raw ~59.9 to ~64.3s
+VO: Group 1 "va nhau", Group 2 "đâm sầm", "Nhóm 'đâm sầm' đoán nhanh hơn."
+- Split screen. Left: "NHÓM 1" with the bubble "va nhau". Right: "NHÓM 2" with "ĐÂM SẦM" in the pill; that word alone shakes.
+- "nhanh hơn": a speedometer under each side; the right needle goes higher. No numbers.
+- Rat: **surprised** on "đâm sầm".
 
-### S9 Broken glass | audio2 ~26 to 45.7
-VO: "Một tuần sau, bà gài một câu hỏi bẫy... Bạn có thấy kính vỡ không? Trong video không hề có kính vỡ. Nhưng chữ 'đâm sầm' khiến não tưởng tượng ra một vụ va chạm mạnh, mà va mạnh thì phải vỡ kính. Thế là nhóm này trả lời 'có' nhiều gấp đôi nhóm kia."
-- "Một tuần sau": a calendar flips 7 pages (500ms), label "+7 ngày".
-- "câu hỏi bẫy": card with tagline "CÂU HỎI BẪY", headline "Bạn có thấy kính vỡ không?", pill on "kính vỡ".
-- "không hề có kính vỡ": a mini replay of the clean crash in a small frame, with a mint check "0 mảnh kính".
-- "tưởng tượng": a Group 2 character gets a thought bubble. Inside it, the same crash replays faster and more dramatic.
-- "phải vỡ kính": cracked-glass shards appear only inside the bubble. The real frame beside it stays clean. The contrast is the point.
-- "gấp đôi": 2 bars grow, NHÓM 1 = 1 unit and NHÓM 2 = 2 units. A "x2" pill counts up 1 to 2.
+### S9 Broken glass trap | raw ~64.8 to ~76.1s
+VO: "Một tuần sau, bà gài một câu hỏi bẫy ... Bạn có thấy kính vỡ không? ... va mạnh thì phải vỡ kính ... nhiều gấp đôi nhóm kia."
+- "Một tuần sau": a calendar flips 7 pages, "+7 ngày".
+- "câu hỏi bẫy": card "CÂU HỎI BẪY" with the headline "Bạn có thấy kính vỡ không?", pill on "kính vỡ".
+- "không hề có kính vỡ": a mini replay of the clean crash with a mint check "0 mảnh kính".
+- "tưởng tượng": a Group 2 character's thought bubble replays the crash dramatically, with glass shards **only inside the bubble**.
+- "gấp đôi": 2 bars, 1 unit vs 2 units, and a pill counting "x1 → x2".
+- Rat: **scratch head** on "câu hỏi bẫy", then **teach** tapping the x2 bar.
 
-### S10 Misinformation effect | audio2 45.99 to 51.16
+### S10 Misinformation effect | raw ~76.4 to 79.0s
 VO: "Chỉ một chữ nghe sau sự việc đã viết đè lên ký ức. Hiện tượng này gọi là misinformation effect."
-- "viết đè": a film-frame "memory card" shows the clean crash. The word "đâm sầm" flies in, and a #0077B6 pen scribbles glass onto the frame (a write-over animation, 600ms).
-- "misinformation effect": term card with tagline "HIỆN TƯỢNG", headline "misinformation effect", pill on "misinformation". Hold until the scene ends.
+- "viết đè": a film-frame memory card of the clean crash; "đâm sầm" flies in and a #0077B6 pen scribbles glass onto it.
+- "misinformation effect": term card with the tagline "HIỆN TƯỢNG", pill on "misinformation".
+- Rat: **glasses off** on the term card.
 
-### S11 Memory is rebuilt | audio2 51.53 to 57.24 (about 5.5s after cuts)
+### S11 Memory is rebuilt | raw 79.4 to 83.7s
 VO: "Ký ức không phải video được lưu sẵn. Mỗi lần nhớ, não dựng lại từ đầu, và đôi khi dựng sai."
-- Whip cut. `vid 5.5` full-screen for the whole scene. Start it on "Ký ức". If the clip is 5.5s and the VO is longer, slow the clip to fit (max 0.9x). If shorter, hold the last frame.
-- "không phải video": a small #0077B6 "▶ REC" badge top-left gets a strike-through.
-- "dựng lại": a frosted card at the bottom, headline "Não dựng lại", pill on "dựng lại".
-- "dựng sai": the card text glitches once (2 frames of RGB split) and swaps to "đôi khi dựng sai". This is the only glitch in the video.
+- `vid_5_5` full-frame for the whole scene (slow it to 0.9x if needed).
+- "không phải video": a "▶ REC" badge gets struck through.
+- "dựng lại": frosted card at the bottom, "Não dựng lại".
+- "dựng sai": one 2-frame RGB glitch; the card changes to "đôi khi dựng sai".
+- Rat: small, lower-right, **think**.
 
-### S12 CTA | audio2 57.52 to end
-VO: "Follow mình để phần sau cùng tìm hiểu: làm sao các nhà khoa học cài được cả một ký ức tuổi thơ chưa từng xảy ra."
-- White background. The logo scales in at the centre-top (spring, 300ms).
-- "phần sau": card with tagline "TẬP SAU", headline "Cài ký ức giả", pill on "ký ức giả".
-- "Follow": a #0077B6 "Follow" pill pulses once under the card.
-- Hold the final frame 0.8s after the VO ends.
+### S12 CTA | raw 84.1 to 88.1 (end)s
+VO: "Follow để tập sau chuột tím kể tiếp: làm sao các nhà khoa học cài được cả một ký ức tuổi thơ chưa từng xảy ra."
+- `logo_rat_avatar` scales in top-centre. Card: tagline "TẬP SAU", headline "Cài ký ức giả", pill on "ký ức giả", subline "Lost in a mall".
+- "Follow": a #0077B6 Follow pill pulses once.
+- Rat: **wave**, then exit. Hold the last frame 0.8s.
 
 ## Output
-- `episodes/01-false-memory/out/ep01_false_memory.mp4` plus `captions.srt`.
-- Report back in 3 lines max: final duration, any anchor word you could not find, anything you changed from this brief.
+- `episodes/01-false-memory/out/ep01_false_memory_v3.mp4` plus `captions.srt`.
+- Export 6 stills (S1, S3, S4, S6, S9, S12).
+- Report in 3 lines max: duration, missing anchors, changes.
