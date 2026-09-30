@@ -4,3 +4,4 @@ snapshots/
 *.log
 work-*/
 .*hf-transaction-*/
+episodes/*/out/*_v3.mp4
