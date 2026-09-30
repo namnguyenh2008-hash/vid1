@@ -2,3 +2,4 @@ node_modules/
 .thumbnails/
 snapshots/
 *.log
+work-*/
